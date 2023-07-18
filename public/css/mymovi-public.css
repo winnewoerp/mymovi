@@ -4,7 +4,27 @@ body {
   height: 100%;
 }
 
-#ifl-map {
+.mymovi-map {
   height: 400px;
   width: 100%;
+}
+
+/* MyMoVi form */
+
+.mymovi-form .mymovi-nav-wrapper {
+	display: flex;
+}
+
+.mymovi-form .mymovi-nav-wrapper .mymovi-nav.prev {
+	width: 50%;
+}
+
+.mymovi-form .mymovi-nav-wrapper .mymovi-nav.next {
+	width: 50%;
+	text-align: right;
+}
+
+.mymovi-form-submit,
+.mymovi-nav-wrapper {
+  margin-top: 1.5rem;
 }
