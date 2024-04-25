@@ -7,6 +7,11 @@ body {
 .mymovi-map {
   height: 400px;
   width: 100%;
+  position: relative;
+}
+
+.mymovi-map.select-mode canvas {
+	cursor: crosshair;
 }
 
 /* MyMoVi form */
@@ -27,4 +32,52 @@ body {
 .mymovi-form-submit,
 .mymovi-nav-wrapper {
   margin-top: 1.5rem;
+}
+
+.properties-input {
+  display: none;
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  height: calc(100% - 4rem);
+  width: calc(100% - 4rem);
+  z-index: 1;
+  padding: 1rem;
+  background: rgba(255,255,255,.8);
+  box-sizing: border-box;
+}
+
+.mymovi-form .edit-button.select-mode {
+	background: rgb(230, 19, 126);
+}
+
+.mymovi-form .remove-last-point {
+	display: none;
+}
+
+.mymovi-form .remove-last-point.drawing-active {
+	display: inline-block;
+}
+
+.mymovi-form .map-icon {
+	height: 80px;
+	width: 80px;
+	text-align: center;
+	border-radius: 10px;
+	padding: 10px;
+	display: table;
+	margin-bottom: 20px;
+}
+
+.mymovi-form .map-icon-inner {
+	display: table-cell;
+	vertical-align: middle;
+	height: 80px;
+}
+
+.mymovi-form .map-icon img {
+	max-height: 100%;
+	height: auto;
+	max-width: 100%;
+	width: auto;
 }

@@ -3,7 +3,7 @@
 Plugin Name: MyMoVi - My Mobility Vision
 Plugin URI: https://perimobil.linieplus.de
 Description: A tool for participatory mobility vision creation.
-Version: 0.1
+Version: 0.3
 Requires at least: 6.1.1
 Requires PHP: 8.0
 Author: Linie Plus, Stadtkreation, and Perimobil project team
@@ -41,7 +41,7 @@ if ( is_admin() ) {
 function mymovi_posttype_init() {
 	$mymovi_posttypes = array(
 		array(
-			'name' => 'mmv-survey-entry',
+			'name' => 'mymovi-survey-entry',
 			'slug' => 'survey-entry',
 			'singular' => __('Survey entry','mymovi'),
 			'plural' => __('Survey entries','mymovi')
@@ -112,6 +112,14 @@ add_shortcode('mymovi-test', 'mymovi_test_shortcode');
 function mymovi_form_shortcode($atts, $content) {
 	$output = '';
 	
+	$a = shortcode_atts( 
+		array(
+			'stop-at-page' => 9999,
+			'stop-at-page-text' => esc_html__('Next pages not yet activated','mymovi'),
+		), 
+		$atts
+	);
+		
 	$form_pages = explode('[mymovi-form-pagebreak]', $content);
 	
 	$err = false;
@@ -121,24 +129,22 @@ function mymovi_form_shortcode($atts, $content) {
 		<div class="mymovi-message success">
 			<p>' . esc_html__('You have successfully submitted your data.', 'mymovi') . '</p>
 		</div>';
-		$output .= '<p>The following fields will be saved:</p><p>';
-		foreach($_POST as $key => $value) {
-			if(str_starts_with($key, 'mmv-field')) {
-				$output .= $key . ': ' . $value;
-			}
-		}
-		$output .= '</p>';
 		
 		$post = array(
 			'post_title'	=> esc_html__('Entry','mymovi') . ' ' . current_datetime()->format('Y-m-d H:i:s'),
 			'post_status'	=> 'draft',
-			'post_type'	=> 'mmv-survey-entry'
+			'post_type'	=> 'mymovi-survey-entry'
 		);
 		
 		$postid = wp_insert_post($post);
 		
+		// add custom field with title of current survey
+		add_post_meta($postid,'mymovi-field-survey-name',get_the_title());
+		
+		// add all custom meta from survey form
 		foreach($_POST as $key => $value) {
-			if(str_starts_with($key, 'mmv-field')) {
+			if(str_starts_with($key, 'mymovi-field')) {
+				if(is_array($value)) $value = implode('||', $value);
 				add_post_meta($postid,$key,$value);
 			}
 		}
@@ -148,7 +154,7 @@ function mymovi_form_shortcode($atts, $content) {
 		<div class="wp-block-group has-global-padding">
 			<form class="mymovi-form" method="post" action="">
 				<div class="mymovi-form-pages-wrapper">
-					<div class="mymovi-form-page page-1">
+					<div id="page-1" class="mymovi-form-page page-1">
 				';
 		$index = 1;
 		foreach($form_pages as $form_page) {
@@ -179,8 +185,13 @@ function mymovi_form_shortcode($atts, $content) {
 						
 			// next page button
 			if($index < sizeof($form_pages)) {
-				$output .= '
+				if($index < $a['stop-at-page']) {
+					$output .= '
 								<div class="wp-block-button"><a class="wp-block-button__link wp-element-button mymovi-button" data-showpage="page-' . ($index + 1) . '" href="#">' . esc_html__('Next', 'mymovi'). '</a></div>';
+				} else {
+					$output .= '
+								<p>' . $a['stop-at-page-text'] . '</p>';
+				}
 			}
 			
 			// close nav wrapper
@@ -198,9 +209,13 @@ function mymovi_form_shortcode($atts, $content) {
 			if($index < sizeof($form_pages)) {
 				$output .= '
 					</div>
-					<div class="mymovi-form-page page-' . ($index + 1) . '">';
+					<div id="page-' . ($index + 1) . '" class="mymovi-form-page page-' . ($index + 1) . '">';
 			}
+			
+			if($index == $a['stop-at-page']) break;
+			
 			$index++;
+			
 		}
 		$output .= '
 					</div>
@@ -213,16 +228,45 @@ function mymovi_form_shortcode($atts, $content) {
 }
 add_shortcode('mymovi-form', 'mymovi_form_shortcode');
 
-function mymovi_form_field_shortcode($atts, $content) {
+function mymovi_form_field_shortcode($atts, $content, $tag) {
 	$output = '';
 	
-	/*$a = shortcode_atts( 
+	$a = shortcode_atts( 
 		array(
 			'type' => 'text',
+			'geometry-text-field' => esc_html__('Description','mymovi'),
+			'geometries' => 'Point,LineString,Circle,Polygon,None',
+			'map-center-lon' => 12.47245,
+			'map-center-lat' => 51.34671,
+			'map-default-zoom' => 12,
 			'name' => '',
+			'options' => '',
+			'option_texts' => '',
+			'minlength' => '',
+			'maxlength' => '',
+			'min' => '',
+			'max' => '',
+			'color' => 'rgb(230, 19, 126)',
+			'icon' => '',
 		), 
 		$atts
-	);*/
+	);
+	
+	$required = '';
+	if(str_contains($tag, '*')) $required = ' required';
+	
+	$options = explode('||', $a['options']);
+	$option_texts = explode('||', $a['option_texts']);
+	
+	$geometries = explode(',', $a['geometries']);
+	
+	$geometry_labels = array(
+		'Point' => esc_html__('Location', 'mymovi'),
+		'LineString' => esc_html__('Route', 'mymovi'),
+		'Circle' => esc_html__('Radius', 'mymovi'),
+		'Polygon' => esc_html__('Area', 'mymovi'),
+		'None' => esc_html__('None', 'mymovi')
+	);
 	
 	$type = 'text';
 	$label = '';
@@ -234,33 +278,129 @@ function mymovi_form_field_shortcode($atts, $content) {
 		
 	}	
 	
-	$label_output = array(
-		'<label>' . $label,
-		'</label>'
-	);
-	
 	switch($type) {
 		case 'text':
 			$output .= '
 			<div class="mymovi-form-field input-field type-text">
-				' . $label_output[0] . '<br>
-					<input type="text" name="mmv-field-' . $name . '">
-				' . $label_output[1] . '
+				<label>' . $label . '<br>
+					<input type="text" name="mymovi-field-' . $name . '" minlength="' . $a['minlength'] . '" maxlength="' . $a['minlength'] . '"' . $required . '>
+				</label>
 			</div>';
 			break;
+			
+		case 'textarea':
+			$output .= '
+			<div class="mymovi-form-field input-field type-textarea">
+				<label>' . $label . '<br>
+					<textarea name="mymovi-field-' . $name . '" minlength="' . $a['minlength'] . '" maxlength="' . $a['minlength'] . '"' . $required . '></textarea>
+				</label>
+			</div>';
+			break;
+			
+		case 'number':
+			$output .= '
+			<div class="mymovi-form-field input-field type-number">
+				<label>' . $label . '<br>
+					<input type="number" name="mymovi-field-' . $name . '" min="' . $a['min'] . '" max="' . $a['min'] . '"' . $required . '>
+				</label>
+			</div>';
+			break;
+		case 'select':
+			$output .= '
+			<div class="class="mymovi-form-field input-field type-select">
+				<label>' . $label . '<br>
+					<select name="mymovi-field-' . $name . '"' . $required . '>
+						<option value="">' . esc_html__('Please select','mymovi') . '</option>';
+			$count = 0;
+			foreach($options as $option) {
+				$output .= '
+					    <option value="' . $option . '"> ' . (isset($option_texts[$count]) && $option_texts[$count] ? $option_texts[$count] : $option) . '</option>';
+				$count++;
+			}
+			$output .= '
+					</select>
+				</label>
+			</div>';
+			break;
+			
+		case 'checkbox':
+			$output .= '
+			<p class="mymovi-form-field-wrapper type-checkbox">';
+			if(sizeof($options) == 1) {
+				$output .= '
+				<label>
+					<input type="checkbox" name="mymovi-field-' . $name . '[]"' . $required . '> ' . $label . '
+				</label>';
+			} else {
+				$output .= '		
+				<strong>' . $label . '</strong><br>';
+				$count = 0;
+				foreach($options as $option) {
+					$output .= '
+				<label>
+					<input type="checkbox" name="mymovi-field-' . $name . '[]"' . $required . ' value="' . $option . '"> ' . (isset($option_texts[$count]) && $option_texts[$count] ? $option_texts[$count] : $option) . '<br>
+				</label>';
+					$count++;
+				}
+			}
+			$output .= '
+			</p>';
+			break;
+		
+		case 'radio':
+			$output .= '
+			<p class="mymovi-form-field-wrapper type-radio">
+				<strong>' . $label . '</strong><br>';
+			$count = 0;
+			foreach($options as $option) {
+				$output .= '
+				<label>
+					<input type="radio" name="mymovi-field-' . $name . '"' . $required . ' value="' . $option . '"> ' . (isset($option_texts[$count]) && $option_texts[$count] ? $option_texts[$count] : $option) . '<br>
+				</label>';
+				$count++;
+			}
+			$output .= '
+			</p>';
+			break;
+		
 		case 'map':
 			$output .= '
-			<select class="form-select" id="select-geometry-type" name="geometry-type">
-				<option value="Point">Point</option>
-				<option value="LineString">LineString</option>
-				<option value="Polygon">Polygon</option>
-				<option value="Circle">Circle</option>
-				<option value="None">None</option>
-  			</select>
- 			<input class="form-control" type="button" value="Remove last point (only for LineString and Polygon)" id="undo">
-			<div class="mymovi-form-field mymovi-map map-field type-map" id="' . $name . '"></div>
-			<button id="show-geojson">GeoJSON anzeigen</button>
-			<script> addMap("' . $name . '", true); </script>';
+			<div class="mymovi-form-map-wrapper">';
+			
+			if($a['icon']) {
+				$output .= '
+				<div class="map-icon" style="background:' . $a['color'] . '">
+					<div class="map-icon-inner">
+						<img src="' . $a['icon'] . '" alt="map icon ' . $a['name'] . '">
+					</div>
+				</div>';
+			}
+			
+			$output .= '
+				<p><select style="display:none" class="form-select select-drawing-tools" id="select-geometry-type-' . $name . '" name="geometry-type">';
+			
+			foreach($geometries as $geometry) {
+				$output .= '
+					<option value="' . $geometry . '">' . $geometry_labels[$geometry] . '</option>';
+			}
+			$output .= '
+  				</select>';
+			
+			$output .= '
+				<input class="form-control edit-button" type="button" value="✐ ' . esc_html__('Edit text or delete', 'mymovi') . '" id="mymovi-button-select-' . $name .'">
+				' . (in_array('LineString',$geometries) ? '<input class="form-control remove-last-point" type="button" value="⌫ ' . esc_html__('Remove last point','mymovi') . '" id="undo-' . $name  . '">' : '') .'
+				<input type="hidden" name="mymovi-field-' . $name . '-geojson" id="' . $name . '-geojson" value="{&quot;type&quot;:&quot;FeatureCollection&quot;,&quot;features&quot;:[]}"></p>
+				<div class="mymovi-form-field mymovi-map map-field type-map" id="' . $name . '">
+					<div class="properties-input">
+						<p><label>' .$a['geometry-text-field'] . '
+							<textarea id="mymovi-property-description-' . $name . '" name="mymovi-property-description-' . $name . '"></textarea>
+						</label></p>
+						<p class="close-wrapper"><a href="#" class="close">' . esc_html__('Save and close','mymovi') . '</a></p>
+						<p class="delete-feature-warpper"><a href="#" class="delete-feature">' . esc_html__('Delete feature','mymovi') . '</a></p>
+					</div>
+				</div>
+				<script> addMap("' . $name . '", true, ' . $a['map-center-lon'] . ', ' . $a['map-center-lat'] . ', ' . $a['map-default-zoom'] . ', "' . $a['color'] . '"); </script>
+			</div>';
 
 			break;
 	}

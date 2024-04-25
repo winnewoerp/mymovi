@@ -1,19 +1,44 @@
-function addMap(id, draw = false) {
+let source = {};
+let map = {}
+let vector = {}
+let selectedFeature;
+let currentInteractions;
+
+function addMap(id, draw = false, centerLon, centerLat, defaultZoom, vectorColor) {
+  
+  // initially hide edit button
+  let parentNode = document.querySelector('#' + id).parentNode;
+  parentNode.querySelector('.edit-button').style.display = 'none';
+  
   if(document.getElementById(id)) {
     const raster = new ol.layer.Tile({
       source: new ol.source.OSM(),
     });
-
-    const source = new ol.source.Vector({wrapX: false});
-
-    const vector = new ol.layer.Vector({
-      source: source,
+    
+ 
+	let featuresContent = null;
+	if(document.getElementById(id + '-geojson').value) {
+		featuresContent = (new ol.format.GeoJSON()).readFeatures(document.getElementById(id + '-geojson').value, { featureProjection: 'EPSG:3857' });
+	}
+	
+    source[id] = new ol.source.Vector({
+	  wrapX: false,
+	  features: featuresContent
+	});
+	  
+	/*if(document.getElementById(id + '-geojson').value) {
+	  format = new ol.format.GeoJSON();
+	  source[id].addFeatures(format.readFeatures(document.getElementById(id + '-geojson').value), {featureProjection: 'EPSG:3857'});
+	}*/
+	  
+    vector[id] = new ol.layer.Vector({
+      source: source[id],
       style: {
-        'fill-color': 'rgba(230, 19, 126, .2)',
-        'stroke-color': 'rgb(230, 19, 126)',
+        'fill-color': vectorColor,
+        'stroke-color': vectorColor,
         'stroke-width': 2,
         'circle-radius': 7,
-        'circle-fill-color': 'rgba(230, 19, 126, .8)',
+        'circle-fill-color': vectorColor,
       },
     });
 
@@ -24,60 +49,217 @@ function addMap(id, draw = false) {
     extent[0] += extent[0];
     extent[2] += extent[2];
     */
-
-    const map = new ol.Map({
+    
+    // TBD: dynamic coordinate and zoom settings
+    // static values: Arzberg!!
+    map[id] = new ol.Map({
       target: id,
-      layers: [raster, vector],
+      layers: [raster, vector[id]],
       view: new ol.View({
-        center: ol.proj.fromLonLat([12.47209, 51.34680]),
-        zoom: 15,
+        center: ol.proj.fromLonLat([centerLon, centerLat]),
+        zoom: defaultZoom,
       // TBD! extent
       }),
     });
+    
+    if(document.getElementById(id + '-geojson').value) {
+      format = new ol.format.GeoJSON();
+      source[id].addFeatures(format.readFeatures(document.getElementById(id + '-geojson').value));
+    }
+    
+    drawingEnabled = true;
 
     if(draw) {
-      const modify = new ol.interaction.Modify({source: source});
-      map.addInteraction(modify);
+      let draw, snap, modify; // global so we can remove them later
 
-      let draw, snap; // global so we can remove them later
+      const typeSelect = document.getElementById('select-geometry-type-' + id);
 
-      const typeSelect = document.getElementById('select-geometry-type');
-
-      function addInteractions() {
-        draw = new ol.interaction.Draw({
-          source: source,
-          type: typeSelect.value,
-        });
-        map.addInteraction(draw);
-        snap = new ol.interaction.Snap({
-          source: source,
-        });
-        map.addInteraction(snap);
+      function addDrawingInteractions() {
+        if(drawingEnabled) {
+          draw = new ol.interaction.Draw({
+            source: source[id],
+            type: typeSelect.value,
+          });
+          map[id].addInteraction(draw);
+          if(document.getElementById('undo-' + id)) {
+		        draw.on('drawstart', function() {
+              document.getElementById('undo-' + id).classList.add('drawing-active');
+            });
+            draw.on('drawend', function() {
+              document.getElementById('undo-' + id).classList.remove('drawing-active');
+            });
+          }
+          
+          snap = new ol.interaction.Snap({
+            source: source[id],
+          });
+          map[id].addInteraction(snap);
+          modify = new ol.interaction.Modify({
+            source: source[id],
+          });
+          map[id].addInteraction(modify);
+          selectedFeature = null;
+        }
+      }
+      
+      function removeInteractions() {
+        map[id].removeInteraction(draw);
+        map[id].removeInteraction(snap);
+        map[id].removeInteraction(modify);
+        map[id].removeInteraction(selectSingleClick);
       }
 
-      /**
-       * Handle change event.
-       */
+      // change interactions when new tool selected
       typeSelect.onchange = function () {
-        map.removeInteraction(draw);
-        map.removeInteraction(snap);
-        addInteractions();
+        removeInteractions();
+        addDrawingInteractions();
       };
-
-      addInteractions();
-
-      document.getElementById('undo').addEventListener('click', function () {
-        draw.removeLastPoint();
+      
+      addDrawingInteractions();
+      
+      // Remove last point of LineString or Polygon
+      if(document.getElementById('undo-' + id)) {
+        document.getElementById('undo-' + id).addEventListener('click', function () {
+          draw.removeLastPoint();
+        });
+      }
+      
+      // Write geodata of current feature to GeoJSON
+      source[id].on('addfeature', function() {
+        
+        // show modify button
+        let parentNode = document.querySelector('#' + id).parentNode;
+        parentNode.querySelector('.edit-button').style.display = 'inline-block';
+        
+        removeInteractions();
+        drawingEnabled = false;
+        document.querySelector('#' + id + ' .properties-input').style.display = 'block';
+        addDrawingInteractions();
       });
       
-      document.getElementById('show-geojson').addEventListener('click', function (e) {
-        e.preventDefault();
+      document.getElementById('mymovi-property-description-' + id).onchange = function() {
+        let currentFeature;
+        if(selectedFeature) {
+          currentFeature = selectedFeature;
+        }
+        else {
+          currentFeature = source[id].getFeatures()[source[id].getFeatures().length - 1];
+        }
+        if(currentFeature) currentFeature.setProperties({ 'description': document.getElementById('mymovi-property-description-' + id).value})
+      }
+      
+      // Handle property input box close
+      document.querySelector('#' + id + ' .properties-input .close').onclick = function(elem){
+		    document.getElementById(id).classList.remove('select-mode');
+		    document.getElementById('mymovi-button-select-' + id).classList.remove('select-mode');
+		  
+        removeInteractions();
+        elem.preventDefault();
+        document.querySelector('#' + id + ' .properties-input').style.display = "none";
+        document.querySelector('#' + id + ' .properties-input #mymovi-property-description-' + id).value = '';
+        drawingEnabled = true;
+        selectSingleClick.getFeatures().clear();
+        addDrawingInteractions();
+      }
+      
+      // Handle property input box delete (TBD: Remove redundancies!)
+      document.querySelector('#' + id + ' .properties-input .delete-feature').onclick = function(elem){
+        document.getElementById(id).classList.remove('select-mode');
+		    document.getElementById('mymovi-button-select-' + id).classList.remove('select-mode');
+        
+        removeInteractions();
+        elem.preventDefault();
+        let currentFeature;
+        if(selectedFeature) {
+          currentFeature = selectedFeature;
+        }
+        else {
+          currentFeature = source[id].getFeatures()[source[id].getFeatures().length - 1];
+        }
+        source[id].removeFeature(currentFeature);
+        
+        if(vector[id].getSource().getFeatures().length == 0) {
+          let parentNode = document.querySelector('#' + id).parentNode;
+          parentNode.querySelector('.edit-button').style.display = 'none';
+        }
+        
+        document.querySelector('#' + id + ' .properties-input').style.display = "none";
+        document.querySelector('#' + id + ' .properties-input #mymovi-property-description-' + id).value = '';
+        drawingEnabled = true;
+        selectSingleClick.getFeatures().clear();
+        addDrawingInteractions();
+      }
+      
+      // Write geodata of drawn features to GeoJSON
+      source[id].on('change', function() {
         let geom = [];
-        source.forEachFeature( function(feature) { geom.push(new ol.Feature(feature.getGeometry().clone().transform('EPSG:3857', 'EPSG:4326'))); } );
+        source[id].forEachFeature( function(feature) {
+          let newFeature = new ol.Feature(feature.getGeometry().clone().transform('EPSG:3857', 'EPSG:4326'));
+          newFeature.setProperties({'description': feature.get('description')});
+          geom.push(newFeature);
+        });
         let writer = new ol.format.GeoJSON();
         let geoJsonStr = writer.writeFeatures(geom);
-        alert(geoJsonStr);
+        document.getElementById(id + '-geojson').value = geoJsonStr;
       });
+      
+      // Style for feature selection
+      let selectStyle = function (feature) {
+        let fill = new ol.style.Fill({
+            color: '#000099',
+        });
+
+        let stroke = new ol.style.Stroke({
+            color: '#000099',
+            width: 3
+        });
+
+        let styles = [
+          new ol.style.Style({
+            image: new ol.style.Circle({
+              fill: fill,
+              stroke: stroke,
+              radius: 7
+            }),
+            fill: fill,
+            stroke: stroke
+          })
+        ];
+        return styles;
+      }
+      
+      // Define single click interaction
+      const selectSingleClick = new ol.interaction.Select({
+        style: selectStyle,
+      });
+      
+      // Handle single click select event
+      selectSingleClick.on('select', function(evt){
+        if(evt.selected[0]) {
+          selectedFeature = evt.selected[0];
+          if(selectedFeature.get('description')) document.getElementById('mymovi-property-description-' + id).value = selectedFeature.get('description');
+          document.querySelector('#' + id + ' .properties-input').style.display = 'block';
+        } else {
+          selectedFeature = null;
+        }
+      })
+      
+      const selectElement = document.getElementById('mymovi-button-select-' + id);
+      
+      selectElement.onclick = changeInteraction;
+      
+      function changeInteraction() {
+		document.getElementById(id).classList.add('select-mode');
+		document.getElementById('mymovi-button-select-' + id).classList.add('select-mode');
+		  
+        if(document.getElementById(id + '-geojson')) {
+          let geoJsonObject = JSON.parse(document.getElementById(id + '-geojson').value);
+          if(geoJsonObject.features.length) {
+            removeInteractions();
+            map[id].addInteraction(selectSingleClick);
+          }
+        }
+      }
 
       /*let points = [],
           url_osrm_nearest = '//router.project-osrm.org/nearest/v1/driving/',
@@ -90,7 +272,7 @@ function addMap(id, draw = false) {
             }),
           };
 
-      map.on('click', function(evt){
+      map[id].on('click', function(evt){
         if(typeSelect.value == 'Point') {
           utils.getNearest(evt.coordinate).then(function(coord_street){
           let last_point = points[points.length - 1];
@@ -157,7 +339,7 @@ function addMap(id, draw = false) {
             geometry: route
           });
           feature.setStyle(routeStyle.route);
-          source.addFeature(feature);
+          source[id].addFeature(feature);
         },
         to4326: function(coord) {
           return ol.proj.transform([
@@ -175,13 +357,52 @@ document.addEventListener("DOMContentLoaded", () => {
    */
   if(document.querySelector('.mymovi-form')) {
     document.querySelectorAll('.mymovi-form-page').forEach((item) => {item.style.display = 'none'});
-    document.querySelectorAll('.mymovi-form-page .mymovi-button').forEach((item) => {
+    document.querySelectorAll('.mymovi-form-page .mymovi-button:not(.deactivated)').forEach((item) => {
       item.onclick = (event) => {
         event.preventDefault();
+        window.scrollTo(0, 0);
         event.target.closest('.mymovi-form-page').style.display = "none";
         document.querySelector('.mymovi-form-page.' + event.target.getAttribute('data-showpage')).style.display = 'block';
+        window.location.hash = document.querySelector('.mymovi-form-page.' + event.target.getAttribute('data-showpage')).getAttribute('id');
       }
     });
-    document.querySelector('.mymovi-form-page:first-child').style.display = 'block';
+    
+    // Set current form page
+    let currentPage = 'page-1';
+    if(document.getElementById(window.location.hash.replace('#',''))) {
+      currentPage = window.location.hash.replace('#','');
+    }
+    
+    document.getElementById(currentPage).style.display = 'block';
   }
+  
+  // TODO: remove redundancy related to previous part 
+  window.onhashchange = function(e) {
+    let currentPage = 'page-1';
+    document.querySelectorAll('.mymovi-form-page').forEach((item) => {
+      item.style.display = "none";
+    });
+    if(document.getElementById(window.location.hash.replace('#',''))) {
+      currentPage = window.location.hash.replace('#','');
+    }
+    
+    document.getElementById(currentPage).style.display = 'block';
+  }
+	
+  /*let countPages = 1;
+  document.querySelectorAll('.mymovi-form-page').forEach((item) => {
+    item.setAttribute('id','page' + countPages);
+    countPages++;
+  });*/
+  
+  // Prevent form submit on enter
+  // @Source: https://stackoverflow.com/a/587575 (2023-07-24)
+  document.querySelector('.mymovi-form').onkeypress = function(e) {
+    e = e || event;
+    var txtArea = /textarea/i.test((e.target || e.srcElement).tagName);
+    return txtArea || (e.keyCode || e.which || e.charCode || 0) !== 13;
+  }
+	
 });
+
+
