@@ -89,26 +89,6 @@ function mymovi_posttype_init() {
 }
 add_action( 'init', 'mymovi_posttype_init' );
 
-function mymovi_test_shortcode($content) {
-	$content .= wpautop('
-	<h2>MyMoVi <br>My Mobility Vision plugin test section</h2> 
-	<strong>TEST: Yes, MyMoVi plugin is working!</strong> This test output appears below all page and post contents. Start drawing (with routes calculated between points).
-	<select class="form-select" id="select-geometry-type" name="geometry-type">
-	<option value="Point">Point</option>
-	<option value="LineString">LineString</option>
-	<option value="Polygon">Polygon</option>
-	<option value="Circle">Circle</option>
-	<option value="None">None</option>
-  </select>
-  <input class="form-control" type="button" value="Remove last point (only for LineString and Polygon)" id="undo">
-  	<p>Street distance: <span id="street-distance">0</span></p>
-	<div class="mymovi-map" id="ifl-map"></div>
-	<script> addMap("ifl-map"); </script>
-	');
-	return $content;
-}
-add_shortcode('mymovi-test', 'mymovi_test_shortcode');
-
 function mymovi_form_shortcode($atts, $content) {
 	$output = '';
 	
