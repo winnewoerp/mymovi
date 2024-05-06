@@ -84,7 +84,6 @@ function mymovi_posttype_init() {
 		);
 
 		register_post_type( $mymovi_posttype['name'], $args );
-		add_post_type_support( $mymovi_posttype['name'],  array( 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments', 'custom-fields', 'revisions' ) );
 	}
 }
 add_action( 'init', 'mymovi_posttype_init' );
