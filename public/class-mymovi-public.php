@@ -98,7 +98,7 @@ class MyMoVi_Public {
 		 */
 		
 		wp_enqueue_script( $this->plugin_name . '-ol', plugin_dir_url( __DIR__ ) . 'includes/openlayers/dist/ol.js', array(), $this->version, false );
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/mymovi-public.js', array( 'jquery' ), $this->version, true );
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/mymovi-public.js', array( 'jquery' ), $this->version, false );
 
 	}
 
