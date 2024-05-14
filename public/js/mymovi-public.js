@@ -1,6 +1,6 @@
 let source = {};
-let map = {}
-let vector = {}
+let map = {};
+let vector = {};
 let selectedFeature;
 let currentInteractions;
 
@@ -42,6 +42,11 @@ function addMap(id, draw = false, centerLon, centerLat, defaultZoom, vectorColor
       },
     });
 
+	// add new layer to previous maps
+	for (let element in map) {
+		map[element].addLayer(vector[id]);
+	}
+
     // Limit multi-world panning to one world east and west of the real world.
     // Geometry coordinates have to be within that range.
     /* TBD! Solve later
@@ -61,6 +66,12 @@ function addMap(id, draw = false, centerLon, centerLat, defaultZoom, vectorColor
       // TBD! extent
       }),
     });
+
+	// add previous layers to new map
+	for (let element in vector) {
+		if (element != id)
+			map[id].addLayer(vector[element]);
+	}
     
     if(document.getElementById(id + '-geojson').value) {
       format = new ol.format.GeoJSON();
