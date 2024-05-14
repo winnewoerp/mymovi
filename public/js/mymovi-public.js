@@ -363,57 +363,53 @@ function addMap(id, draw = false, centerLon, centerLat, defaultZoom, vectorColor
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  /**
-   * MyMoVi form
-   */
-  if(document.querySelector('.mymovi-form')) {
-    document.querySelectorAll('.mymovi-form-page').forEach((item) => {item.style.display = 'none'});
-    document.querySelectorAll('.mymovi-form-page .mymovi-button:not(.deactivated)').forEach((item) => {
-      item.onclick = (event) => {
-        event.preventDefault();
-        window.scrollTo(0, 0);
-        event.target.closest('.mymovi-form-page').style.display = "none";
-        document.querySelector('.mymovi-form-page.' + event.target.getAttribute('data-showpage')).style.display = 'block';
-        window.location.hash = document.querySelector('.mymovi-form-page.' + event.target.getAttribute('data-showpage')).getAttribute('id');
-      }
-    });
+	/**
+	 * MyMoVi form
+	 */
+	if(document.querySelector('.mymovi-form')) {
+		document.querySelectorAll('.mymovi-form-page .mymovi-button:not(.deactivated)').forEach((item) => {
+			item.onclick = (event) => {
+				event.preventDefault();
+				window.scrollTo(0, 0);
+				window.location.hash = document.querySelector('.mymovi-form-page.' + event.target.getAttribute('data-showpage')).getAttribute('id');
+			}
+		});
     
-    // Set current form page
-    let currentPage = 'page-1';
-    if(document.getElementById(window.location.hash.replace('#',''))) {
-      currentPage = window.location.hash.replace('#','');
-    }
-    
-    document.getElementById(currentPage).style.display = 'block';
-  }
+		hideAllPages();
+		showCurrentPage();
+	}
   
-  // TODO: remove redundancy related to previous part 
-  window.onhashchange = function(e) {
-    let currentPage = 'page-1';
-    document.querySelectorAll('.mymovi-form-page').forEach((item) => {
-      item.style.display = "none";
-    });
-    if(document.getElementById(window.location.hash.replace('#',''))) {
-      currentPage = window.location.hash.replace('#','');
-    }
-    
-    document.getElementById(currentPage).style.display = 'block';
-  }
+	window.onhashchange = function(e) {
+		hideAllPages();
+		showCurrentPage();
+	}
 	
-  /*let countPages = 1;
-  document.querySelectorAll('.mymovi-form-page').forEach((item) => {
-    item.setAttribute('id','page' + countPages);
-    countPages++;
-  });*/
-  
-  // Prevent form submit on enter
-  // @Source: https://stackoverflow.com/a/587575 (2023-07-24)
-  document.querySelector('.mymovi-form').onkeypress = function(e) {
-    e = e || event;
-    var txtArea = /textarea/i.test((e.target || e.srcElement).tagName);
-    return txtArea || (e.keyCode || e.which || e.charCode || 0) !== 13;
-  }
+	/*let countPages = 1;
+	document.querySelectorAll('.mymovi-form-page').forEach((item) => {
+		item.setAttribute('id','page' + countPages);
+		countPages++;
+	});*/
 	
+	// Prevent form submit on enter
+	// @Source: https://stackoverflow.com/a/587575 (2023-07-24)
+	document.querySelector('.mymovi-form').onkeypress = function(e) {
+		e = e || event;
+		var txtArea = /textarea/i.test((e.target || e.srcElement).tagName);
+		return txtArea || (e.keyCode || e.which || e.charCode || 0) !== 13;
+	}
 });
 
+function showCurrentPage() {
+	let currentPage = 'page-1';
+	if(document.getElementById(window.location.hash.replace('#',''))) {
+	currentPage = window.location.hash.replace('#','');
+	}
+	
+	document.getElementById(currentPage).style.display = 'block';
+}
 
+function hideAllPages() {
+	document.querySelectorAll('.mymovi-form-page').forEach((item) => {
+		item.style.display = "none";
+	});
+}
