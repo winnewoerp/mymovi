@@ -227,7 +227,8 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 			'max' => '',
 			'color' => 'rgb(230, 19, 126)',
 			'icon' => '',
-		), 
+			'pagenum' => '1',
+		),
 		$atts
 	);
 	
@@ -342,6 +343,26 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 			</p>';
 			break;
 		
+		case 'the_map':
+			$output .= '
+			<div class="mymovi-form-the-map-wrapper">';
+			
+			$output .= '
+				<input class="form-control edit-button" type="button" value="✐ ' . esc_html__('Edit text or delete', 'mymovi') . '" id="mymovi-button-select-' . $name .'">
+				' . (in_array('LineString',$geometries) ? '<input class="form-control remove-last-point" type="button" value="⌫ ' . esc_html__('Remove last point','mymovi') . '" id="undo-' . $name  . '">' : '') .'
+				<div class="mymovi-form-field mymovi-map map-field type-map" id="' . $name . '">
+					<div class="properties-input">
+						<p><label>' .$a['geometry-text-field'] . '
+							<textarea id="mymovi-property-description-' . $name . '" name="mymovi-property-description-' . $name . '"></textarea>
+						</label></p>
+						<p class="close-wrapper"><a href="#" class="close">' . esc_html__('Save and close','mymovi') . '</a></p>
+						<p class="delete-feature-warpper"><a href="#" class="delete-feature">' . esc_html__('Delete feature','mymovi') . '</a></p>
+					</div>
+				</div>
+				<script> addMap("' . $name . '", ' . $a['map-center-lon'] . ', ' . $a['map-center-lat'] . ', ' . $a['map-default-zoom'] . '); </script>
+			</div>';
+			break;
+
 		case 'map':
 			$output .= '
 			<div class="mymovi-form-map-wrapper">';
@@ -356,29 +377,16 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 			}
 			
 			$output .= '
-				<p><select style="display:none" class="form-select select-drawing-tools" id="select-geometry-type-' . $name . '" name="geometry-type">';
+				<p><select style="display:none" class="form-select select-drawing-tools" id="select-geometry-type-' . $a['pagenum'] . '" name="geometry-type">';
 			
 			foreach($geometries as $geometry) {
 				$output .= '
 					<option value="' . $geometry . '">' . $geometry_labels[$geometry] . '</option>';
 			}
 			$output .= '
-  				</select>';
-			
-			$output .= '
-				<input class="form-control edit-button" type="button" value="✐ ' . esc_html__('Edit text or delete', 'mymovi') . '" id="mymovi-button-select-' . $name .'">
-				' . (in_array('LineString',$geometries) ? '<input class="form-control remove-last-point" type="button" value="⌫ ' . esc_html__('Remove last point','mymovi') . '" id="undo-' . $name  . '">' : '') .'
-				<input type="hidden" name="mymovi-field-' . $name . '-geojson" id="' . $name . '-geojson" value="{&quot;type&quot;:&quot;FeatureCollection&quot;,&quot;features&quot;:[]}"></p>
-				<div class="mymovi-form-field mymovi-map map-field type-map" id="' . $name . '">
-					<div class="properties-input">
-						<p><label>' .$a['geometry-text-field'] . '
-							<textarea id="mymovi-property-description-' . $name . '" name="mymovi-property-description-' . $name . '"></textarea>
-						</label></p>
-						<p class="close-wrapper"><a href="#" class="close">' . esc_html__('Save and close','mymovi') . '</a></p>
-						<p class="delete-feature-warpper"><a href="#" class="delete-feature">' . esc_html__('Delete feature','mymovi') . '</a></p>
-					</div>
-				</div>
-				<script> addMap("' . $name . '", true, ' . $a['map-center-lon'] . ', ' . $a['map-center-lat'] . ', ' . $a['map-default-zoom'] . ', "' . $a['color'] . '"); </script>
+  				</select>
+				<input type="hidden" name="mymovi-field-' . $name . '-geojson" id="' . $a['pagenum'] . '-geojson" value="{&quot;type&quot;:&quot;FeatureCollection&quot;,&quot;features&quot;:[]}"></p>
+				<script type="text/javascript"> document.addEventListener("DOMContentLoaded", () => {addLayer("' . $a['pagenum'] . '", "' . $a['color'] . '");});</script>
 			</div>';
 
 			break;
