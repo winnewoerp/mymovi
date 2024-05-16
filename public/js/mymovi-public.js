@@ -146,10 +146,12 @@ function addLayer(id, vectorColor) {
 	map.addLayer(vector[id]);
 
 	// change interactions when new tool selected
-	document.getElementById('select-geometry-type-' + id).onchange = function () {
-		removeInteractions();
-		addDrawingInteractions();
-	};
+	if (document.getElementById('select-geometry-type-' + id)) {
+		document.getElementById('select-geometry-type-' + id).onchange = function () {
+			removeInteractions();
+			addDrawingInteractions();
+		};
+	}
       
 	// Open feature properties box
 	source[id].on('addfeature', function() {

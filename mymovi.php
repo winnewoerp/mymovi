@@ -376,15 +376,18 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 				</div>';
 			}
 			
-			$output .= '
-				<p><select style="display:none" class="form-select select-drawing-tools" id="select-geometry-type-' . $a['pagenum'] . '" name="geometry-type">';
-			
-			foreach($geometries as $geometry) {
+			if (count($geometries) > 1) {
 				$output .= '
-					<option value="' . $geometry . '">' . $geometry_labels[$geometry] . '</option>';
+					<p><select class="form-select select-drawing-tools" id="select-geometry-type-' . $a['pagenum'] . '" name="geometry-type">';
+				
+				foreach($geometries as $geometry) {
+					$output .= '
+						<option value="' . $geometry . '">' . $geometry_labels[$geometry] . '</option>';
+				}
+				$output .= '
+					</select>';
 			}
 			$output .= '
-  				</select>
 				<input type="hidden" name="mymovi-field-' . $name . '-geojson" id="' . $a['pagenum'] . '-geojson" value="{&quot;type&quot;:&quot;FeatureCollection&quot;,&quot;features&quot;:[]}"></p>
 				<script type="text/javascript"> document.addEventListener("DOMContentLoaded", () => {addLayer("' . $a['pagenum'] . '", "' . $a['color'] . '");});</script>
 			</div>';
