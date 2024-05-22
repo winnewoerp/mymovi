@@ -1,6 +1,7 @@
 let source = {};
 let map;
 let vector = {};
+let singleLayer = {};
 let selectedFeature;
 let drawingEnabled = true;
 
@@ -288,6 +289,10 @@ function showCurrentPage() {
 
 	removeInteractions();
 	addDrawingInteractions();
+
+	for (let layer in vector) {
+		vector[layer].setVisible(!singleLayer[getCurrentPagenum()] || layer == getCurrentPagenum());
+	}
 }
 
 function hideAllPages() {

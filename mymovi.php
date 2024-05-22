@@ -228,6 +228,7 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 			'color' => 'rgb(230, 19, 126)',
 			'icon' => '',
 			'pagenum' => '1',
+			'single-layer' => 'false',
 		),
 		$atts
 	);
@@ -386,10 +387,14 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 				}
 				$output .= '
 					</select>';
+			} else {
+				$output .= '
+					<input type="hidden" id="select-geometry-type-' . $a['pagenum'] . '" name="geometry-type" value="'. $geometries[0] .'">';
 			}
 			$output .= '
 				<input type="hidden" name="mymovi-field-' . $name . '-geojson" id="' . $a['pagenum'] . '-geojson" value="{&quot;type&quot;:&quot;FeatureCollection&quot;,&quot;features&quot;:[]}"></p>
-				<script type="text/javascript"> document.addEventListener("DOMContentLoaded", () => {addLayer("' . $a['pagenum'] . '", "' . $a['color'] . '");});</script>
+				<script type="text/javascript"> document.addEventListener("DOMContentLoaded", () => {addLayer("' . $a['pagenum'] . '", "' . $a['color'] . '");});
+				singleLayer["'. $a['pagenum'] .'"] = '. $a['single-layer'] .';</script>
 			</div>';
 
 			break;
