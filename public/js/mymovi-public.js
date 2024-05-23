@@ -9,6 +9,12 @@ let draw, snap, modify;
 const selectSingleClick = new ol.interaction.Select({
 	style: selectStyle,
 	hitTolerance: 5,
+	layers: (layer) => {
+		return layer.get('page') == getCurrentPagenum();
+	},
+	condition: (event) => {
+		return ol.events.condition.singleClick(event) && drawingEnabled;
+	},
 });
 
 function addMap(id, centerLon, centerLat, defaultZoom) {
@@ -101,6 +107,7 @@ function addMap(id, centerLon, centerLat, defaultZoom) {
 			selectedFeature = evt.selected[0];
 			if(selectedFeature.get('description')) document.getElementById('mymovi-property-description-' + id).value = selectedFeature.get('description');
 			document.querySelector('#' + id + ' .properties-input').style.display = 'block';
+			drawingEnabled = false;
 		} else {
 			selectedFeature = null;
 		}
@@ -141,6 +148,9 @@ function addLayer(id, vectorColor) {
 			'stroke-width': 2,
 			'circle-radius': 7,
 			'circle-fill-color': vectorColor,
+		},
+		properties: {
+			'page': id,
 		},
 	});
 
@@ -290,15 +300,23 @@ function showCurrentPage() {
 	removeInteractions();
 	addDrawingInteractions();
 
-	for (let layer in vector) {
-		vector[layer].setVisible(!singleLayer[getCurrentPagenum()] || layer == getCurrentPagenum());
-	}
+	setLayerVisibility(singleLayer[getCurrentPagenum()]);
 }
 
 function hideAllPages() {
 	document.querySelectorAll('.mymovi-form-page').forEach((item) => {
 		item.style.display = "none";
 	});
+}
+
+/**
+ * Sets all layers visibilities to not the specified bool. If true, sets the visibility of the layer of the current page to true
+ * @param {bool} single specifies whether only one or all layers will be shown
+ */
+function setLayerVisibility(single) {
+	for (let layer in vector) {
+		vector[layer].setVisible(!single || layer == getCurrentPagenum());
+	}
 }
 
 function getCurrentPagenum() {
