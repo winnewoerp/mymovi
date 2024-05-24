@@ -2,6 +2,7 @@ let source = {};
 let map;
 let vector = {};
 let singleLayer = {};
+let geometryText = {};
 let selectedFeature;
 let drawingEnabled = true;
 
@@ -301,6 +302,8 @@ function showCurrentPage() {
 	}
 	
 	document.getElementById(currentPage).style.display = 'block';
+
+	document.getElementById("geometry-text-field").innerHTML = Object.keys(geometryText).includes(getCurrentPagenum()) ? geometryText[getCurrentPagenum()] : geometryText[0];
 
 	removeInteractions();
 	addDrawingInteractions();

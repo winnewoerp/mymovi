@@ -353,14 +353,16 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 				' . (in_array('LineString',$geometries) ? '<input class="form-control remove-last-point" type="button" value="⌫ ' . esc_html__('Remove last point','mymovi') . '" id="undo-' . $name  . '">' : '') .'
 				<div class="mymovi-form-field mymovi-map map-field type-map" id="' . $name . '">
 					<div class="properties-input">
-						<p><label>' .$a['geometry-text-field'] . '
+						<p>
+							<label id="geometry-text-field" for="mymovi-property-description-'. $name .'">' .$a['geometry-text-field'] . '</label>
 							<textarea id="mymovi-property-description-' . $name . '" name="mymovi-property-description-' . $name . '"></textarea>
-						</label></p>
+						</p>
 						<p class="close-wrapper"><a href="#" class="close">' . esc_html__('Save and close','mymovi') . '</a></p>
 						<p class="delete-feature-warpper"><a href="#" class="delete-feature">' . esc_html__('Delete feature','mymovi') . '</a></p>
 					</div>
 				</div>
-				<script> addMap("' . $name . '", ' . $a['map-center-lon'] . ', ' . $a['map-center-lat'] . ', ' . $a['map-default-zoom'] . '); </script>
+				<script> addMap("' . $name . '", ' . $a['map-center-lon'] . ', ' . $a['map-center-lat'] . ', ' . $a['map-default-zoom'] . ');
+				geometryText["0"] = "'. $a['geometry-text-field'] .'"; </script>
 			</div>';
 			break;
 
@@ -394,7 +396,8 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 			$output .= '
 				<input type="hidden" name="mymovi-field-' . $name . '-geojson" id="' . $a['pagenum'] . '-geojson" value="{&quot;type&quot;:&quot;FeatureCollection&quot;,&quot;features&quot;:[]}"></p>
 				<script type="text/javascript"> document.addEventListener("DOMContentLoaded", () => {addLayer("' . $a['pagenum'] . '", "' . $a['color'] . '");});
-				singleLayer["'. $a['pagenum'] .'"] = '. $a['single-layer'] .';</script>
+				singleLayer["'. $a['pagenum'] .'"] = '. $a['single-layer'] .';
+				geometryText["'. $a['pagenum'] .'"] = "'. $a['geometry-text-field'] .'"; </script>
 			</div>';
 
 			break;
