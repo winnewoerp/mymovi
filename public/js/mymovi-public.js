@@ -215,6 +215,11 @@ function addDrawingInteractions() {
 		map.addInteraction(snap);
 		modify = new ol.interaction.Modify({
 			source: source[layer_id],
+			condition: (event) => {
+				let originalEvent = event.originalEvent;
+
+				return originalEvent.isPrimary && ((originalEvent.buttons & 2) == 2 || originalEvent.pointerType == 'touch');
+			}
 		});
 		map.addInteraction(modify);
 		selectedFeature = null;
