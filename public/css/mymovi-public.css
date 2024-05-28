@@ -47,15 +47,15 @@ body {
   box-sizing: border-box;
 }
 
-.mymovi-form .edit-button.select-mode {
+.mymovi-form-the-map .edit-button.select-mode {
 	background: rgb(230, 19, 126);
 }
 
-.mymovi-form .remove-last-point {
+.mymovi-form-the-map .remove-last-point {
 	display: none;
 }
 
-.mymovi-form .remove-last-point.drawing-active {
+.mymovi-form-the-map .remove-last-point.drawing-active {
 	display: inline-block;
 }
 

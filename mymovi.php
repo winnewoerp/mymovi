@@ -346,7 +346,7 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 		
 		case 'the_map':
 			$output .= '
-			<div class="mymovi-form-the-map-wrapper">';
+			<div class="mymovi-form-the-map">';
 			
 			$output .= '
 				<input class="form-control edit-button" type="button" value="✐ ' . esc_html__('Edit text or delete', 'mymovi') . '" id="mymovi-button-select-' . $name .'">
