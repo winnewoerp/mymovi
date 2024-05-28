@@ -47,85 +47,111 @@ function addMap(id, centerLon, centerLat, defaultZoom) {
 
 	// Save feature properties
 	document.getElementById('mymovi-property-description-' + id).onchange = function() {
-		let currentFeature;
-		if(selectedFeature) {
-			currentFeature = selectedFeature;
-		}
-		else {
-			currentFeature = source[getCurrentPagenum()].getFeatures()[source[getCurrentPagenum()].getFeatures().length - 1];
-		}
+		let currentFeature = getCurrentFeature();
 		if(currentFeature)
 			currentFeature.setProperties({ 'description': document.getElementById('mymovi-property-description-' + id).value})
 	}
 
 	// Handle property input box close
 	document.querySelector('#' + id + ' .properties-input .close').onclick = function(elem) {
-		document.getElementById(id).classList.remove('select-mode');
-		document.getElementById('mymovi-button-select-' + id).classList.remove('select-mode');
-		
-		removeInteractions();
 		elem.preventDefault();
-		document.querySelector('#' + id + ' .properties-input').style.display = "none";
-		document.querySelector('#' + id + ' .properties-input #mymovi-property-description-' + id).value = '';
-		drawingEnabled = true;
-		selectSingleClick.getFeatures().clear();
-		addDrawingInteractions();
+
+		closePropertiesInput(id);
 	}
 
-	// Handle property input box delete (TBD: Remove redundancies!)
+	// Handle property input box delete
 	document.querySelector('#' + id + ' .properties-input .delete-feature').onclick = function(elem) {
-		let layer_id = getCurrentPagenum();
-
-		document.getElementById(id).classList.remove('select-mode');
-		document.getElementById('mymovi-button-select-' + id).classList.remove('select-mode');
-
-		removeInteractions();
 		elem.preventDefault();
-		let currentFeature;
-		if(selectedFeature) {
-			currentFeature = selectedFeature;
-		}
-		else {
-			currentFeature = source[layer_id].getFeatures()[source[layer_id].getFeatures().length - 1];
-		}
-		source[layer_id].removeFeature(currentFeature);
-		
-		if(vector[layer_id].getSource().getFeatures().length == 0) {
-			let parentNode = document.getElementById(id).parentNode;
-			parentNode.querySelector('.edit-button').style.display = 'none';
-		}
-		
-		document.querySelector('#' + id + ' .properties-input').style.display = "none";
-		document.querySelector('#' + id + ' .properties-input #mymovi-property-description-' + id).value = '';
-		drawingEnabled = true;
-		selectSingleClick.getFeatures().clear();
-		addDrawingInteractions();
+
+		source[getCurrentPagenum()].removeFeature(getCurrentFeature());
+
+		closePropertiesInput(id);
 	}
 
 	// Handle single click select event
 	selectSingleClick.on('select', function(evt) {
 		if(evt.selected[0]) {
 			selectedFeature = evt.selected[0];
-			if(selectedFeature.get('description')) document.getElementById('mymovi-property-description-' + id).value = selectedFeature.get('description');
-			document.querySelector('#' + id + ' .properties-input').style.display = 'block';
-			drawingEnabled = false;
+			openPropertiesInput(id, selectedFeature.get('description'));
 		} else {
 			selectedFeature = null;
 		}
 	});
 
-	document.getElementById('mymovi-button-select-' + id).addEventListener('click', function(evt) {
-		document.getElementById(id).classList.add('select-mode');
-		document.getElementById('mymovi-button-select-' + id).classList.add('select-mode');
-
-		if(document.getElementById(getCurrentPagenum() + '-geojson')) {
-			let geoJsonObject = JSON.parse(document.getElementById(getCurrentPagenum() + '-geojson').value);
-			if(geoJsonObject.features.length) {
+	document.getElementById('mymovi-button-select-' + id).addEventListener('click', function() {
+		if (map.getInteractions().getArray().includes(selectSingleClick)) {
+			closePropertiesInput(id);
+		} else {
+			if (vector[getCurrentPagenum()] && vector[getCurrentPagenum()].getSource().getFeatures().length) {
 				removeInteractions();
 				map.addInteraction(selectSingleClick);
 			}
+
+			document.getElementById(id).classList.add('select-mode');
+			updateEditButton(id);
 		}
 	});
+}
+
+/**
+ * Gives the currently edited feature. This is either the selected one or the last one added
+ * @param {string} [layer_id=getCurrentPagenum()] the layer id to get the feature from in case none is selected
+ * @returns {FeatureLike} The currently edited feature
+ */
+function getCurrentFeature(layer_id = getCurrentPagenum()) {
+	if(selectedFeature) {
+		return selectedFeature;
+	} else {
+		const currentFeatures = source[layer_id].getFeatures();
+		return currentFeatures[currentFeatures.length - 1];
+	}
+}
+
+/**
+ * Closes the property input for the specified map
+ * @param {string} map_id the id of the map
+ */
+function closePropertiesInput(map_id) {
+	removeInteractions();
+	
+	document.getElementById(map_id).classList.remove('select-mode');
+	updateEditButton(map_id);
+
+	document.querySelector('#' + map_id + ' .properties-input').style.display = "none";
+	document.querySelector('#' + map_id + ' .properties-input #mymovi-property-description-' + map_id).value = '';
+
+	selectSingleClick.getFeatures().clear();
+	drawingEnabled = true;
+	addDrawingInteractions();
+}
+
+/**
+ * Open the property input for the specified map
+ * @param {string} map_id the id of the map
+ * @param {string} description_text the description already present for the feature to edit
+ */
+function openPropertiesInput(map_id, description_text) {
+	document.getElementById('mymovi-property-description-' + map_id).value = (description_text ? description_text : "");
+	document.querySelector('#' + map_id + ' .properties-input').style.display = 'block';
+	drawingEnabled = false;
+	removeInteractions();
+}
+
+/**
+ * Updates the edit button's visibility and style
+ * @param {string} map_id the id of the map
+ * @param {string} layer_id the id of the layer
+ */
+function updateEditButton(map_id, layer_id = getCurrentPagenum()) {
+	const editButton = document.getElementById('mymovi-button-select-' + map_id);
+
+	editButton.style.display = (vector[layer_id] && vector[layer_id].getSource().getFeatures().length ? 'inline-block' : 'none');
+
+	if (map.getInteractions().getArray().includes(selectSingleClick)) {
+		editButton.classList.add('select-mode');
+	} else {
+		editButton.classList.remove('select-mode');
+	}
 }
 
 function addLayer(id, vectorColor) {
@@ -167,13 +193,9 @@ function addLayer(id, vectorColor) {
       
 	// Open feature properties box
 	source[id].on('addfeature', function() {
-		// show modify button
-		let parentNode = map.getTargetElement().parentNode;
-		parentNode.querySelector('.edit-button').style.display = 'inline-block';
+		updateEditButton(map_id);
 		
-		removeInteractions();
-		drawingEnabled = false;
-		document.querySelector('#' + map_id + ' .properties-input').style.display = 'block';
+		openPropertiesInput(map_id, "");
 	});
 
 	// Write geodata of drawn features to GeoJSON
@@ -190,9 +212,7 @@ function addLayer(id, vectorColor) {
 	});
 }
 
-function addDrawingInteractions() {
-	let layer_id = getCurrentPagenum();
-
+function addDrawingInteractions(layer_id = getCurrentPagenum()) {
 	if(drawingEnabled && document.getElementById('select-geometry-type-' + layer_id)) {
 		let map_id = map.getTargetElement().id;
 
@@ -296,6 +316,8 @@ window.addEventListener("load", () => {
 });
 
 function showCurrentPage() {
+	const map_id = map.getTargetElement().id;
+
 	let currentPage = 'page-1';
 	if(document.getElementById(window.location.hash.replace('#',''))) {
 		currentPage = window.location.hash.replace('#','');
@@ -305,10 +327,13 @@ function showCurrentPage() {
 
 	document.getElementById("geometry-text-field").innerHTML = Object.keys(geometryText).includes(getCurrentPagenum()) ? geometryText[getCurrentPagenum()] : geometryText[0];
 
+	document.getElementById('undo-' + map_id).classList.remove('drawing-active');
+
 	removeInteractions();
 	addDrawingInteractions();
 
 	setLayerVisibility(singleLayer[getCurrentPagenum()]);
+	updateEditButton(map_id);
 }
 
 function hideAllPages() {
