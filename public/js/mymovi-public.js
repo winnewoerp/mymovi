@@ -91,6 +91,10 @@ function addMap(id, centerLon, centerLat, defaultZoom) {
 			updateEditButton(id);
 		}
 	});
+
+	document.getElementById('mymovi-button-modify-' + id).addEventListener('change', function() {
+		modify.setActive(document.getElementById('mymovi-button-modify-' + id).checked);
+	});
 }
 
 /**
@@ -236,12 +240,8 @@ function addDrawingInteractions(layer_id = getCurrentPagenum()) {
 		map.addInteraction(snap);
 		modify = new ol.interaction.Modify({
 			source: source[layer_id],
-			condition: (event) => {
-				let originalEvent = event.originalEvent;
-
-				return originalEvent.isPrimary && ((originalEvent.buttons & 2) == 2 || originalEvent.pointerType == 'touch');
-			}
 		});
+		modify.setActive(document.getElementById('mymovi-button-modify-' + map_id).checked);
 		map.addInteraction(modify);
 		selectedFeature = null;
 	}
