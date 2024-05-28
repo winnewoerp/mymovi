@@ -1,0 +1,155 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: MyMoVi\n"
+"POT-Creation-Date: 2024-05-29 00:07+0200\n"
+"PO-Revision-Date: 2024-05-29 00:13+0200\n"
+"Last-Translator: \n"
+"Language-Team: Stadtkreation\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.0.1\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
+"_n_noop:1,2;_c;_nc:4c,1,2;_x:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;_ex:1,2c;"
+"esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;"
+"esc_html_x:1,2c\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: mymovi.php:46
+msgid "Survey entry"
+msgstr "Fragebogen-Eintrag"
+
+#: mymovi.php:47
+msgid "Survey entries"
+msgstr "Fragebogen-Einträge"
+
+#: mymovi.php:57
+msgctxt "mymoviproposal"
+msgid "Add New"
+msgstr "Erstellen"
+
+#: mymovi.php:58
+#, php-format
+msgid "Add New %s"
+msgstr "Neuen %s hinzufügen"
+
+#: mymovi.php:59
+#, php-format
+msgid "New %s"
+msgstr "Neuer %s"
+
+#: mymovi.php:60
+#, php-format
+msgid "Edit %s"
+msgstr "%s bearbeiten"
+
+#: mymovi.php:61
+#, php-format
+msgid "View %s"
+msgstr "%s ansehen"
+
+#: mymovi.php:62
+#, php-format
+msgid "All %s"
+msgstr "Alle %s"
+
+#: mymovi.php:63
+#, php-format
+msgid "Search %s"
+msgstr "%s suchen"
+
+#: mymovi.php:64
+#, php-format
+msgid "Parent %s:"
+msgstr "Übergeordneter %s:"
+
+#: mymovi.php:65
+#, php-format
+msgid "No %s found."
+msgstr "Keine %s gefunden."
+
+#: mymovi.php:66
+#, php-format
+msgid "No %s found in Trash."
+msgstr "Keine %s im Papierkorb gefunden."
+
+#: mymovi.php:97
+msgid "Next pages not yet activated"
+msgstr "Die nächsten Seiten wurde noch nicht aktiviert"
+
+#: mymovi.php:109
+msgid "You have successfully submitted your data."
+msgstr "Sie haben Ihre Daten erfolgreich übermittelt."
+
+#: mymovi.php:113
+msgid "Entry"
+msgstr "Eintrag"
+
+#: mymovi.php:147
+msgid "Submit data"
+msgstr "Daten absenden"
+
+#: mymovi.php:158
+msgid "Prev"
+msgstr "Vorherige"
+
+#: mymovi.php:169
+msgid "Next"
+msgstr "Nächste"
+
+#: mymovi.php:184
+#, php-format
+msgid "Page %1$s of %2$s"
+msgstr "Seite %1$s von %2$s"
+
+#: mymovi.php:216
+msgid "Description"
+msgstr "Beschreibung"
+
+#: mymovi.php:245
+msgid "Location"
+msgstr "Ort"
+
+#: mymovi.php:246
+msgid "Route"
+msgstr "Route"
+
+#: mymovi.php:247
+msgid "Radius"
+msgstr "Radius"
+
+#: mymovi.php:248
+msgid "Area"
+msgstr "Fläche"
+
+#: mymovi.php:249
+msgid "None"
+msgstr "Keiner"
+
+#: mymovi.php:294
+msgid "Please select"
+msgstr "Bitte auswählen"
+
+#: mymovi.php:352
+msgid "Edit text or delete"
+msgstr "Text bearbeiten oder löschen"
+
+#: mymovi.php:353
+msgid "Remove last point"
+msgstr "Letzten Punkt entfernen"
+
+#: mymovi.php:355
+msgid "Modify features"
+msgstr "Features bearbeiten"
+
+#: mymovi.php:362
+msgid "Save and close"
+msgstr "Speichern und schließen"
+
+#: mymovi.php:363
+msgid "Delete feature"
+msgstr "Feature löschen"
