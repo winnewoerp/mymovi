@@ -47,7 +47,7 @@ body {
   box-sizing: border-box;
 }
 
-.mymovi-form-the-map .edit-button.select-mode {
+.mymovi-form-the-map input[type=button].select-mode {
 	background: rgb(230, 19, 126);
 }
 

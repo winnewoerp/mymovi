@@ -351,8 +351,7 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 			$output .= '
 				<input class="form-control edit-button" type="button" value="✐ ' . esc_html__('Edit text or delete', 'mymovi') . '" id="mymovi-button-select-' . $name .'">
 				' . (in_array('LineString',$geometries) || in_array('Polygon', $geometries) ? '<input class="form-control remove-last-point" type="button" value="⌫ ' . esc_html__('Remove last point','mymovi') . '" id="undo-' . $name  . '">' : '') .'
-				<input class="form-control modify-button" type="checkbox" id="mymovi-button-modify-'. $name .'" autocomplete="off">
-				<label for="mymovi-button-modify-'. $name .'">'. esc_html__('Modify features', 'mymovi') .'</label>
+				<input class="form-control modify-button" type="button" value="⌫ ' . esc_html__('Modify features', 'mymovi') . '" id="mymovi-button-modify-'. $name .'" autocomplete="off">
 				<div class="mymovi-form-field mymovi-map map-field type-map" id="' . $name . '">
 					<div class="properties-input">
 						<p>
@@ -364,7 +363,7 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 					</div>
 				</div>
 				<script> addMap("' . $name . '", ' . $a['map-center-lon'] . ', ' . $a['map-center-lat'] . ', ' . $a['map-default-zoom'] . ');
-				geometryText["0"] = "'. $a['geometry-text-field'] .'"; </script>
+				const geometryText = "'. $a['geometry-text-field'] .'"; </script>
 			</div>';
 			break;
 
@@ -397,9 +396,7 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 			}
 			$output .= '
 				<input type="hidden" name="mymovi-field-' . $name . '-geojson" id="' . $a['pagenum'] . '-geojson" value="{&quot;type&quot;:&quot;FeatureCollection&quot;,&quot;features&quot;:[]}"></p>
-				<script type="text/javascript"> document.addEventListener("DOMContentLoaded", () => {addLayer("' . $a['pagenum'] . '", "' . $a['color'] . '");});
-				singleLayer["'. $a['pagenum'] .'"] = '. $a['single-layer'] .';
-				geometryText["'. $a['pagenum'] .'"] = "'. $a['geometry-text-field'] .'"; </script>
+				<script type="text/javascript"> document.addEventListener("DOMContentLoaded", () => {addLayer("' . $a['pagenum'] . '", "' . $a['color'] . '", '. $a['single-layer'] .', "'. $a['geometry-text-field'] .'");});</script>
 			</div>';
 
 			break;

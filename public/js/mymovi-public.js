@@ -1,10 +1,9 @@
-let source = {};
 let map;
+let source = {};
 let vector = {};
-let singleLayer = {};
-let geometryText = {};
 let selectedFeature;
 let drawingEnabled = true;
+let modifyEnabled = false;
 
 let draw, snap, modify;
 const selectSingleClick = new ol.interaction.Select({
@@ -92,8 +91,15 @@ function addMap(id, centerLon, centerLat, defaultZoom) {
 		}
 	});
 
-	document.getElementById('mymovi-button-modify-' + id).addEventListener('change', function() {
-		modify.setActive(document.getElementById('mymovi-button-modify-' + id).checked);
+	document.getElementById('mymovi-button-modify-' + id).addEventListener('click', function(e) {
+		e.preventDefault();
+		modifyEnabled = !modifyEnabled;
+		modify.setActive(modifyEnabled);
+
+		if (modifyEnabled)
+			e.target.classList.add('select-mode');
+		else
+			e.target.classList.remove('select-mode');
 	});
 }
 
@@ -158,7 +164,7 @@ function updateEditButton(map_id, layer_id = getCurrentPagenum()) {
 	}
 }
 
-function addLayer(id, vectorColor) {
+function addLayer(id, vectorColor, single, geometryText) {
 	let map_id = map.getTargetElement().id;
 
 	let featuresContent = null;
@@ -182,8 +188,11 @@ function addLayer(id, vectorColor) {
 		},
 		properties: {
 			'page': id,
+			'single': single,
 		},
 	});
+	if (geometryText)
+		vector[id].set('geometryText', geometryText);
 
 	map.addLayer(vector[id]);
 
@@ -241,7 +250,7 @@ function addDrawingInteractions(layer_id = getCurrentPagenum()) {
 		modify = new ol.interaction.Modify({
 			source: source[layer_id],
 		});
-		modify.setActive(document.getElementById('mymovi-button-modify-' + map_id).checked);
+		modify.setActive(modifyEnabled);
 		map.addInteraction(modify);
 		selectedFeature = null;
 	}
@@ -317,22 +326,17 @@ window.addEventListener("load", () => {
 
 function showCurrentPage() {
 	const map_id = map.getTargetElement().id;
-
-	let currentPage = 'page-1';
-	if(document.getElementById(window.location.hash.replace('#',''))) {
-		currentPage = window.location.hash.replace('#','');
-	}
 	
-	document.getElementById(currentPage).style.display = 'block';
+	document.getElementById('page-' + getCurrentPagenum()).style.display = 'block';
 
-	document.getElementById("geometry-text-field").innerHTML = Object.keys(geometryText).includes(getCurrentPagenum()) ? geometryText[getCurrentPagenum()] : geometryText[0];
+	document.getElementById("geometry-text-field").innerHTML = getCurrentPagenum() in vector ? vector[getCurrentPagenum()].get('geometryText') : geometryText;
 
 	document.getElementById('undo-' + map_id).classList.remove('drawing-active');
 
 	removeInteractions();
 	addDrawingInteractions();
 
-	setLayerVisibility(singleLayer[getCurrentPagenum()]);
+	setLayerVisibility(!(getCurrentPagenum() in vector) || vector[getCurrentPagenum()].get('single'));
 	updateEditButton(map_id);
 }
 
@@ -353,5 +357,5 @@ function setLayerVisibility(single) {
 }
 
 function getCurrentPagenum() {
-	return window.location.hash.replace('#page-','');
+	return window.location.hash.replace('#page-','') || "1";
 }
