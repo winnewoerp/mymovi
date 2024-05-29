@@ -27,9 +27,27 @@ function addMap(id, centerLon, centerLat, defaultZoom) {
 			source: new ol.source.OSM(),
 		});
 
+		const color = document.getElementById(id + '-geojson').value
+			? JSON.parse(document.getElementById(id + '-geojson').value.replaceAll("'", '"')).color
+				|| 'black'
+			: 'black';
+
+		const featuresLayer = new ol.layer.Vector({
+			source: new ol.source.Vector({
+				features: getInputFeatures(id),
+			}),
+			style: {
+				'fill-color': color,
+				'stroke-color': color,
+				'stroke-width': 2,
+				'circle-radius': 7,
+				'circle-fill-color': color,
+			},
+		});
+
 		map = new ol.Map({
 			target: id,
-			layers: [raster],
+			layers: [raster, featuresLayer],
 			view: new ol.View({
 				center: ol.proj.fromLonLat([centerLon, centerLat]),
 				zoom: defaultZoom,
@@ -167,14 +185,9 @@ function updateEditButton(map_id, layer_id = getCurrentPagenum()) {
 function addLayer(id, vectorColor, single, geometryText) {
 	let map_id = map.getTargetElement().id;
 
-	let featuresContent = null;
-	if(document.getElementById(id + '-geojson').value) {
-		featuresContent = (new ol.format.GeoJSON()).readFeatures(document.getElementById(id + '-geojson').value, { featureProjection: 'EPSG:3857' });
-	}
-
 	source[id] = new ol.source.Vector({
 		wrapX: false,
-		features: featuresContent,
+		features: getInputFeatures(id),
 	});
 
 	vector[id] = new ol.layer.Vector({
@@ -223,6 +236,18 @@ function addLayer(id, vectorColor, single, geometryText) {
 		let geoJsonStr = writer.writeFeatures(geom);
 		document.getElementById(id + '-geojson').value = geoJsonStr;
 	});
+}
+
+/**
+ * The features to add to the map for the given id
+ * @param {string} id The (layer or map) id of the features
+ * @returns {FeatureLike[]}
+ */
+function getInputFeatures(id) {
+	if(document.getElementById(id + '-geojson').value) {
+		return (new ol.format.GeoJSON()).readFeatures(document.getElementById(id + '-geojson').value.replaceAll("'", '"'), { featureProjection: 'EPSG:3857' });
+	}
+	return [];
 }
 
 function addDrawingInteractions(layer_id = getCurrentPagenum()) {

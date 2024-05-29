@@ -215,6 +215,7 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 			'type' => 'text',
 			'geometry-text-field' => esc_html__('Description','mymovi'),
 			'geometries' => 'Point,LineString,Circle,Polygon,None',
+			'features' => '',
 			'map-center-lon' => 12.47245,
 			'map-center-lat' => 51.34671,
 			'map-default-zoom' => 12,
@@ -362,6 +363,7 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 						<p class="delete-feature-warpper"><a href="#" class="delete-feature">' . esc_html__('Delete feature','mymovi') . '</a></p>
 					</div>
 				</div>
+				<input type="hidden" name="mymovi-field-' . $name . '-geojson" id="' . $name . '-geojson" value="'. str_replace("\"", "&quot;", $a['features']) .'"></p>
 				<script> addMap("' . $name . '", ' . $a['map-center-lon'] . ', ' . $a['map-center-lat'] . ', ' . $a['map-default-zoom'] . ');
 				const geometryText = "'. $a['geometry-text-field'] .'"; </script>
 			</div>';
@@ -395,7 +397,7 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 					<input type="hidden" id="select-geometry-type-' . $a['pagenum'] . '" name="geometry-type" value="'. $geometries[0] .'">';
 			}
 			$output .= '
-				<input type="hidden" name="mymovi-field-' . $name . '-geojson" id="' . $a['pagenum'] . '-geojson" value="{&quot;type&quot;:&quot;FeatureCollection&quot;,&quot;features&quot;:[]}"></p>
+				<input type="hidden" name="mymovi-field-' . $name . '-geojson" id="' . $a['pagenum'] . '-geojson" value="'. str_replace("\"", "&quot;", $a['features']) .'"></p>
 				<script type="text/javascript"> document.addEventListener("DOMContentLoaded", () => {addLayer("' . $a['pagenum'] . '", "' . $a['color'] . '", '. $a['single-layer'] .', "'. $a['geometry-text-field'] .'");});</script>
 			</div>';
 
