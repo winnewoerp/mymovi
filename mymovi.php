@@ -226,6 +226,7 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 			'maxlength' => '',
 			'min' => '',
 			'max' => '',
+			'step' => '',
 			'color' => 'rgb(230, 19, 126)',
 			'icon' => '',
 			'pagenum' => '1',
@@ -283,13 +284,33 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 			$output .= '
 			<div class="mymovi-form-field input-field type-number">
 				<label>' . $label . '<br>
-					<input type="number" name="mymovi-field-' . $name . '" min="' . $a['min'] . '" max="' . $a['min'] . '"' . $required . '>
+					<input type="number" name="mymovi-field-' . $name . '" min="' . $a['min'] . '" max="' . $a['max'] . '"' . $required . '>
 				</label>
+			</div>';
+			break;
+		case 'range':
+			$output .= '
+			<div class="mymovi-form-field input-field type-slider">
+				<label>' . $label . '<br>
+					<input type="range" id="range-'. $name .'" name="range-'. $name .'" min="'. $a['min'] .'" max="'. $a['max'] .'" step="'. $a['step'] .'" list="datalist-'. $name .'" />
+				</label>
+				
+				<datalist id="datalist-'.$name.'">';
+
+			$count = 0;
+			foreach($options as $option) {
+				$output .= '
+					<option value="'. $option .'">'. (isset($option_texts[$count]) && $option_texts[$count] ? $option_texts[$count] : $option) .'</option>';
+				$count++;
+			}
+
+			$output .= '
+				</datalist>
 			</div>';
 			break;
 		case 'select':
 			$output .= '
-			<div class="class="mymovi-form-field input-field type-select">
+			<div class="mymovi-form-field input-field type-select">
 				<label>' . $label . '<br>
 					<select name="mymovi-field-' . $name . '"' . $required . '>
 						<option value="">' . esc_html__('Please select','mymovi') . '</option>';
