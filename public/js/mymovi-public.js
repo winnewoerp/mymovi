@@ -356,19 +356,21 @@ window.addEventListener("load", () => {
 });
 
 function showCurrentPage() {
-	const map_id = map.getTargetElement().id;
+	const map_id = map ? map.getTargetElement().id : '';
 	
 	document.getElementById('page-' + getCurrentPagenum()).style.display = 'block';
 
-	document.getElementById("geometry-text-field").innerHTML = getCurrentPagenum() in vector ? vector[getCurrentPagenum()].get('geometryText') : geometryText;
+	if (map_id) {
+		document.getElementById("geometry-text-field").innerHTML = getCurrentPagenum() in vector ? vector[getCurrentPagenum()].get('geometryText') : geometryText;
 
-	document.getElementById('undo-' + map_id).classList.remove('drawing-active');
+		document.getElementById('undo-' + map_id).classList.remove('drawing-active');
 
-	removeInteractions();
-	addDrawingInteractions();
-
-	setLayerVisibility(!(getCurrentPagenum() in vector) || vector[getCurrentPagenum()].get('single'));
-	updateControlButtons(map_id);
+		removeInteractions();
+		addDrawingInteractions();
+	
+		setLayerVisibility(!(getCurrentPagenum() in vector) || vector[getCurrentPagenum()].get('single'));
+		updateControlButtons(map_id);
+	}
 }
 
 function hideAllPages() {
