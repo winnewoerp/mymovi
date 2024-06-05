@@ -104,8 +104,9 @@ function addMap(id, centerLon, centerLat, defaultZoom) {
 				map.addInteraction(selectSingleClick);
 			}
 
+			document.getElementById('undo-' + id).classList.remove('drawing-active');
 			document.getElementById(id).classList.add('select-mode');
-			updateEditButton(id);
+			updateControlButtons(id);
 		}
 	});
 
@@ -114,10 +115,7 @@ function addMap(id, centerLon, centerLat, defaultZoom) {
 		modifyEnabled = !modifyEnabled;
 		modify.setActive(modifyEnabled);
 
-		if (modifyEnabled)
-			e.target.classList.add('select-mode');
-		else
-			e.target.classList.remove('select-mode');
+		updateControlButtons(id);
 	});
 }
 
@@ -143,7 +141,7 @@ function closePropertiesInput(map_id) {
 	removeInteractions();
 	
 	document.getElementById(map_id).classList.remove('select-mode');
-	updateEditButton(map_id);
+	updateControlButtons(map_id);
 
 	document.querySelector('#' + map_id + ' .properties-input').style.display = "none";
 	document.querySelector('#' + map_id + ' .properties-input #mymovi-property-description-' + map_id).value = '';
@@ -166,20 +164,28 @@ function openPropertiesInput(map_id, description_text) {
 }
 
 /**
- * Updates the edit button's visibility and style
+ * Updates the control buttons' visibility and style
  * @param {string} map_id the id of the map
  * @param {string} layer_id the id of the layer
  */
-function updateEditButton(map_id, layer_id = getCurrentPagenum()) {
+function updateControlButtons(map_id, layer_id = getCurrentPagenum()) {
+	const modifyButton = document.getElementById('mymovi-button-modify-' + map_id);
 	const editButton = document.getElementById('mymovi-button-select-' + map_id);
 
-	editButton.style.display = (vector[layer_id] && vector[layer_id].getSource().getFeatures().length ? 'inline-block' : 'none');
+	const displayStyle = vector[layer_id] && vector[layer_id].getSource().getFeatures().length ? 'inline-block' : 'none';
 
-	if (map.getInteractions().getArray().includes(selectSingleClick)) {
+	editButton.style.display = displayStyle;
+	modifyButton.style.display = displayStyle;
+
+	if (map.getInteractions().getArray().includes(selectSingleClick))
 		editButton.classList.add('select-mode');
-	} else {
+	else 
 		editButton.classList.remove('select-mode');
-	}
+
+	if (modifyEnabled)
+		modifyButton.classList.add('select-mode');
+	else
+		modifyButton.classList.remove('select-mode');
 }
 
 function addLayer(id, vectorColor, single, geometryText) {
@@ -219,7 +225,7 @@ function addLayer(id, vectorColor, single, geometryText) {
       
 	// Open feature properties box
 	source[id].on('addfeature', function() {
-		updateEditButton(map_id);
+		updateControlButtons(map_id);
 		
 		openPropertiesInput(map_id, "");
 	});
@@ -362,7 +368,7 @@ function showCurrentPage() {
 	addDrawingInteractions();
 
 	setLayerVisibility(!(getCurrentPagenum() in vector) || vector[getCurrentPagenum()].get('single'));
-	updateEditButton(map_id);
+	updateControlButtons(map_id);
 }
 
 function hideAllPages() {
