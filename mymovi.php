@@ -290,7 +290,7 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 			break;
 		case 'range':
 			$output .= '
-			<div class="mymovi-form-field input-field type-slider">
+			<div class="mymovi-form-field input-field type-range">
 				<label>' . $label . '<br>
 					<input type="range" id="range-'. $name .'" name="range-'. $name .'" min="'. $a['min'] .'" max="'. $a['max'] .'" step="'. $a['step'] .'" list="datalist-'. $name .'" />
 				</label>
