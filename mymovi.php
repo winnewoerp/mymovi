@@ -374,8 +374,8 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 				<div class="map-control-buttons">
 					<input class="form-control edit-button" type="button" value="✐ ' . esc_html__('Edit text or delete', 'mymovi') . '" id="mymovi-button-select-' . $name .'">
 					' . (in_array('LineString',$geometries) || in_array('Polygon', $geometries) ? '
+					<input class="form-control modify-button" type="button" value="✐ ' . esc_html__('Modify features', 'mymovi') . '" id="mymovi-button-modify-'. $name .'" autocomplete="off">
 					<input class="form-control remove-last-point" type="button" value="⌫ ' . esc_html__('Remove last point','mymovi') . '" id="undo-' . $name  . '">' : '') .'
-					<input class="form-control modify-button" type="button" value="⌫ ' . esc_html__('Modify features', 'mymovi') . '" id="mymovi-button-modify-'. $name .'" autocomplete="off">
 				</div>
 				<div class="mymovi-form-field mymovi-map map-field type-map" id="' . $name . '">
 					<div class="properties-input">
