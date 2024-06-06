@@ -231,6 +231,7 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 			'icon' => '',
 			'pagenum' => '1',
 			'single-layer' => 'false',
+			'show-on'=>'',
 		),
 		$atts
 	);
@@ -258,9 +259,10 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 		if(isset($atts[0]) && $atts[0]) $type = $atts[0];
 		if(isset($atts[1]) && $atts[1]) $name = $atts[1];
 		if(isset($atts[2]) && $atts[2]) $label = $atts[2];
-		
 	}	
 	
+	if ($a['show-on'])
+		$output .= '<div data-mymovi-show-on="'. $a['show-on'] .'" style="display:none;">';
 	switch($type) {
 		case 'text':
 			$output .= '
@@ -427,11 +429,104 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 
 			break;
 	}
+	if ($a['show-on'])
+		$output .= "</div>";
 	return $output;
 }
 add_shortcode('mymovi-form-field','mymovi_form_field_shortcode');
 add_shortcode('mymovi-form-field*','mymovi_form_field_shortcode');
 
+function mymovi_form_field_subfields_shortcode($atts, $content) {
+	$output = '';
+	
+	$a = shortcode_atts( 
+		array(
+			'type' => '',
+			'name' => '',
+			'options' => '',
+			'option_texts' => '',
+		),
+		$atts
+	);
+	
+	$options = explode('||', $a['options']);
+	$option_texts = explode('||', $a['option_texts']);
+	
+	$type = 'text';
+	$label = '';
+	
+	if(is_array($atts) && $atts) {
+		if(isset($atts[0]) && $atts[0]) $type = $atts[0];
+		if(isset($atts[1]) && $atts[1]) $name = $atts[1];
+		if(isset($atts[2]) && $atts[2]) $label = $atts[2];
+	}	
+	
+	switch($type) {
+		case 'select':
+			$output .= '
+			<div class="mymovi-form-field input-field type-select">
+				<label>' . $label . '<br>
+					<select name="mymovi-field-' . $name . '" oninput=" showSubfields(\''. $name .'\'); ">
+						<option value="">' . esc_html__('Please select','mymovi') . '</option>';
+			$count = 0;
+			foreach($options as $option) {
+				$output .= '
+					    <option value="' . $option . '"> ' . (isset($option_texts[$count]) && $option_texts[$count] ? $option_texts[$count] : $option) . '</option>';
+				$count++;
+			}
+			$output .= '
+					</select>
+				</label>
+			</div>';
+			break;
+		case 'checkbox':
+			$output .= '
+			<p class="mymovi-form-field-wrapper type-checkbox">';
+			if(sizeof($options) == 1) {
+				$output .= '
+				<label>
+					<input type="checkbox" name="mymovi-field-' . $name . '[]" oninput=" showSubfields(\''. $name .'\'); "> ' . $label . '
+				</label>';
+			} else {
+				$output .= '		
+				<strong>' . $label . '</strong><br>';
+				$count = 0;
+				foreach($options as $option) {
+					$output .= '
+				<label>
+					<input type="checkbox" name="mymovi-field-' . $name . '[]" value="' . $option . '" oninput=" showSubfields(\''. $name .'\'); "> ' . (isset($option_texts[$count]) && $option_texts[$count] ? $option_texts[$count] : $option) . '<br>
+				</label>';
+					$count++;
+				}
+			}
+			$output .= '
+			</p>';
+			break;
+		case 'radio':
+			$output .= '
+			<p class="mymovi-form-field-wrapper type-radio">
+				<strong>' . $label . '</strong><br>';
+			$count = 0;
+			foreach($options as $option) {
+				$output .= '
+				<label>
+					<input type="radio" name="mymovi-field-' . $name . '" value="' . $option . '" oninput=" showSubfields(\''. $name .'\'); "> ' . (isset($option_texts[$count]) && $option_texts[$count] ? $option_texts[$count] : $option) . '<br>
+				</label>';
+				$count++;
+			}
+			$output .= '
+			</p>';
+			break;
+	}
+
+	$output .= '
+			<div id="mymovi-'. $name .'-subfields">'.
+				$content
+			.'</div>';
+
+	return do_shortcode($output);
+}
+add_shortcode('mymovi-form-field-subfields','mymovi_form_field_subfields_shortcode');
 
 /**
  * The core plugin class that is used to define internationalization,

@@ -392,3 +392,21 @@ function setLayerVisibility(single) {
 function getCurrentPagenum() {
 	return window.location.hash.replace('#page-','') || "1";
 }
+
+/**
+ * Shows the subfields of the field with the specified id according to the value of that field
+ * @param {string} id 
+ */
+function showSubfields(id) {
+	const parentField = document.querySelector('[name="mymovi-field-' + id + '"]:checked');
+	const subfields = document.querySelectorAll('#mymovi-' + id + '-subfields div[data-mymovi-show-on]');
+	const showSubfields = document.querySelectorAll('#mymovi-' + id + '-subfields div[data-mymovi-show-on="' + parentField.value + '"]');
+
+	for (const field of subfields) {
+		field.style.display = 'none';
+	}
+
+	for (const field of showSubfields) {
+		field.style.display = '';
+	}
+}
