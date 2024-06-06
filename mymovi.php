@@ -466,7 +466,7 @@ function mymovi_form_field_subfields_shortcode($atts, $content) {
 			$output .= '
 			<div class="mymovi-form-field input-field type-select">
 				<label>' . $label . '<br>
-					<select name="mymovi-field-' . $name . '" oninput=" showSubfields(\''. $name .'\'); ">
+					<select name="mymovi-field-' . $name . '" oninput=" showSubfields(\''. $name .'\', event.target); ">
 						<option value="">' . esc_html__('Please select','mymovi') . '</option>';
 			$count = 0;
 			foreach($options as $option) {
@@ -485,7 +485,7 @@ function mymovi_form_field_subfields_shortcode($atts, $content) {
 			if(sizeof($options) == 1) {
 				$output .= '
 				<label>
-					<input type="checkbox" name="mymovi-field-' . $name . '[]" oninput=" showSubfields(\''. $name .'\'); "> ' . $label . '
+					<input type="checkbox" name="mymovi-field-' . $name . '" oninput=" showSubfields(\''. $name .'\', event.target, event.target); "> ' . $label . '
 				</label>';
 			} else {
 				$output .= '		
@@ -494,7 +494,7 @@ function mymovi_form_field_subfields_shortcode($atts, $content) {
 				foreach($options as $option) {
 					$output .= '
 				<label>
-					<input type="checkbox" name="mymovi-field-' . $name . '[]" value="' . $option . '" oninput=" showSubfields(\''. $name .'\'); "> ' . (isset($option_texts[$count]) && $option_texts[$count] ? $option_texts[$count] : $option) . '<br>
+					<input type="checkbox" name="mymovi-field-' . $name . '" value="' . $option . '" oninput=" showSubfields(\''. $name .'\', event.target); "> ' . (isset($option_texts[$count]) && $option_texts[$count] ? $option_texts[$count] : $option) . '<br>
 				</label>';
 					$count++;
 				}
@@ -510,7 +510,7 @@ function mymovi_form_field_subfields_shortcode($atts, $content) {
 			foreach($options as $option) {
 				$output .= '
 				<label>
-					<input type="radio" name="mymovi-field-' . $name . '" value="' . $option . '" oninput=" showSubfields(\''. $name .'\'); "> ' . (isset($option_texts[$count]) && $option_texts[$count] ? $option_texts[$count] : $option) . '<br>
+					<input type="radio" name="mymovi-field-' . $name . '" value="' . $option . '" oninput=" showSubfields(\''. $name .'\', event.target); "> ' . (isset($option_texts[$count]) && $option_texts[$count] ? $option_texts[$count] : $option) . '<br>
 				</label>';
 				$count++;
 			}

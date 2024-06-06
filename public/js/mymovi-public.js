@@ -395,18 +395,16 @@ function getCurrentPagenum() {
 
 /**
  * Shows the subfields of the field with the specified id according to the value of that field
- * @param {string} id 
+ * @param {string} id
+ * @param {HTMLElement} target
  */
-function showSubfields(id) {
-	const parentField = document.querySelector('[name="mymovi-field-' + id + '"]:checked');
+function showSubfields(id, target) {
 	const subfields = document.querySelectorAll('#mymovi-' + id + '-subfields div[data-mymovi-show-on]');
-	const showSubfields = document.querySelectorAll('#mymovi-' + id + '-subfields div[data-mymovi-show-on="' + parentField.value + '"]');
 
 	for (const field of subfields) {
-		field.style.display = 'none';
-	}
-
-	for (const field of showSubfields) {
-		field.style.display = '';
+		if ((target.checked == undefined || target.checked) && field.dataset.mymoviShowOn.split('||').includes(target.value))
+			field.style.display = '';
+		else
+			field.style.display = 'none';
 	}
 }
