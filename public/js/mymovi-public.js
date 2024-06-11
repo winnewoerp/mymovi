@@ -191,13 +191,15 @@ function updateControlButtons(map_id, layer_id = getCurrentPagenum()) {
 function addLayer(id, vectorColor, single, geometryText) {
 	let map_id = map.getTargetElement().id;
 
-	source[id] = new ol.source.Vector({
+	let pagenum = getPagenum(document.getElementById(id));
+
+	source[pagenum] = new ol.source.Vector({
 		wrapX: false,
 		features: getInputFeatures(id),
 	});
 
-	vector[id] = new ol.layer.Vector({
-		source: source[id],
+	vector[pagenum] = new ol.layer.Vector({
+		source: source[pagenum],
 		style: {
 			'fill-color': vectorColor,
 			'stroke-color': vectorColor,
@@ -206,14 +208,15 @@ function addLayer(id, vectorColor, single, geometryText) {
 			'circle-fill-color': vectorColor,
 		},
 		properties: {
-			'page': id,
+			'page': pagenum,
 			'single': single,
+			'id': id,
 		},
 	});
 	if (geometryText)
-		vector[id].set('geometryText', geometryText);
+		vector[pagenum].set('geometryText', geometryText);
 
-	map.addLayer(vector[id]);
+	map.addLayer(vector[pagenum]);
 
 	// change interactions when new tool selected
 	if (document.getElementById('select-geometry-type-' + id)) {
@@ -224,16 +227,16 @@ function addLayer(id, vectorColor, single, geometryText) {
 	}
       
 	// Open feature properties box
-	source[id].on('addfeature', function() {
+	source[pagenum].on('addfeature', function() {
 		updateControlButtons(map_id);
 		
 		openPropertiesInput(map_id, "");
 	});
 
 	// Write geodata of drawn features to GeoJSON
-	source[id].on('change', function() {
+	source[pagenum].on('change', function() {
 		let geom = [];
-		source[id].forEachFeature( function(feature) {
+		source[pagenum].forEachFeature( function(feature) {
 			let newFeature = new ol.Feature(feature.getGeometry().clone().transform('EPSG:3857', 'EPSG:4326'));
 			newFeature.setProperties({'description': feature.get('description')});
 			geom.push(newFeature);
@@ -257,12 +260,12 @@ function getInputFeatures(id) {
 }
 
 function addDrawingInteractions(layer_id = getCurrentPagenum()) {
-	if(drawingEnabled && document.getElementById('select-geometry-type-' + layer_id)) {
+	if(drawingEnabled && document.getElementById('select-geometry-type-' + vector[layer_id].get('id'))) {
 		let map_id = map.getTargetElement().id;
 
 		draw = new ol.interaction.Draw({
 			source: source[layer_id],
-			type: document.getElementById('select-geometry-type-' + layer_id).value,
+			type: document.getElementById('select-geometry-type-' + vector[layer_id].get('id')).value,
 		});
 		map.addInteraction(draw);
 		if(document.getElementById('undo-' + map_id)) {
@@ -401,6 +404,20 @@ function setLayerVisibility(single) {
 
 function getCurrentPagenum() {
 	return window.location.hash.replace('#page-','') || "1";
+}
+
+/**
+ * Returns the number of the page the given element is a part of
+ * @param {Element} element
+ */
+function getPagenum(element) {
+	if (element.id == undefined) {
+		return "1";
+	} else if (!element.id.includes('page-')) {
+		return getPagenum(element.parentNode);
+	} else {
+		return element.id.replace('page-', '');
+	}
 }
 
 /**

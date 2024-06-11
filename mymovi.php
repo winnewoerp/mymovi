@@ -229,7 +229,6 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 			'step' => '',
 			'color' => 'rgb(230, 19, 126)',
 			'icon' => '',
-			'pagenum' => '1',
 			'single-layer' => 'false',
 			'show-on'=>'',
 		),
@@ -397,7 +396,7 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 
 		case 'map':
 			$output .= '
-			<div class="mymovi-form-map-wrapper">';
+			<div class="mymovi-form-map-wrapper" id="'. $name .'">';
 			
 			if($a['icon']) {
 				$output .= '
@@ -410,7 +409,7 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 			
 			if (count($geometries) > 1) {
 				$output .= '
-					<p><select class="form-select select-drawing-tools" id="select-geometry-type-' . $a['pagenum'] . '" name="geometry-type">';
+					<p><select class="form-select select-drawing-tools" id="select-geometry-type-' . $name . '" name="geometry-type">';
 				
 				foreach($geometries as $geometry) {
 					$output .= '
@@ -420,11 +419,11 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 					</select>';
 			} else {
 				$output .= '
-					<input type="hidden" id="select-geometry-type-' . $a['pagenum'] . '" name="geometry-type" value="'. $geometries[0] .'">';
+					<input type="hidden" id="select-geometry-type-' . $name . '" name="geometry-type" value="'. $geometries[0] .'">';
 			}
 			$output .= '
-				<input type="hidden" name="mymovi-field-' . $name . '-geojson" id="' . $a['pagenum'] . '-geojson" value="'. str_replace("\"", "&quot;", $a['features']) .'"></p>
-				<script type="text/javascript"> document.addEventListener("DOMContentLoaded", () => {addLayer("' . $a['pagenum'] . '", "' . $a['color'] . '", '. $a['single-layer'] .', "'. $a['geometry-text-field'] .'");});</script>
+				<input type="hidden" name="mymovi-field-' . $name . '-geojson" id="' . $name . '-geojson" value="'. str_replace("\"", "&quot;", $a['features']) .'"></p>
+				<script type="text/javascript"> document.addEventListener("DOMContentLoaded", () => {addLayer("' . $name . '", "' . $a['color'] . '", '. $a['single-layer'] .', "'. $a['geometry-text-field'] .'");});</script>
 			</div>';
 
 			break;
