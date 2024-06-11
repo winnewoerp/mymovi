@@ -390,7 +390,7 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 				</div>
 				<input type="hidden" name="mymovi-field-' . $name . '-geojson" id="' . $name . '-geojson" value="'. str_replace("\"", "&quot;", $a['features']) .'"></p>
 				<script> addMap("' . $name . '", ' . $a['map-center-lon'] . ', ' . $a['map-center-lat'] . ', ' . $a['map-default-zoom'] . ');
-				const geometryText = "'. $a['geometry-text-field'] .'"; </script>
+				const GEOMETRY_TEXT = "'. $a['geometry-text-field'] .'"; </script>
 			</div>';
 			break;
 

@@ -211,10 +211,9 @@ function addLayer(id, vectorColor, single, geometryText) {
 			'page': pagenum,
 			'single': single,
 			'id': id,
+			'geometryText': geometryText ? geometryText : GEOMETRY_TEXT,
 		},
 	});
-	if (geometryText)
-		vector[pagenum].set('geometryText', geometryText);
 
 	map.addLayer(vector[pagenum]);
 
@@ -260,7 +259,7 @@ function getInputFeatures(id) {
 }
 
 function addDrawingInteractions(layer_id = getCurrentPagenum()) {
-	if(drawingEnabled && document.getElementById('select-geometry-type-' + vector[layer_id].get('id'))) {
+	if(drawingEnabled && layer_id in vector && document.getElementById('select-geometry-type-' + vector[layer_id].get('id'))) {
 		let map_id = map.getTargetElement().id;
 
 		draw = new ol.interaction.Draw({
@@ -365,7 +364,7 @@ function showPage(pagenum = getCurrentPagenum()) {
 	document.getElementById('page-' + pagenum).style.display = 'block';
 
 	if (map_target) {
-		document.getElementById("geometry-text-field").innerHTML = has_vector_layer ? vector[pagenum].get('geometryText') : geometryText;
+		document.getElementById("geometry-text-field").innerHTML = has_vector_layer ? vector[pagenum].get('geometryText') : GEOMETRY_TEXT;
 
 		document.getElementById('undo-' + map_target.id).classList.remove('drawing-active');
 
