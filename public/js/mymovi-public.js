@@ -332,12 +332,12 @@ window.addEventListener("load", () => {
 		});
 
 		hideAllPages();
-		showCurrentPage();
+		showPage();
 	}
 
 	window.onhashchange = function(e) {
 		hideAllPages();
-		showCurrentPage();
+		showPage();
 	}
 	
 	/*let countPages = 1;
@@ -355,21 +355,31 @@ window.addEventListener("load", () => {
 	}
 });
 
-function showCurrentPage() {
-	const map_id = map ? map.getTargetElement().id : '';
+function showPage(pagenum = getCurrentPagenum()) {
+	const map_target = map ? map.getTargetElement() : false;
+	const has_vector_layer = pagenum in vector;
 	
-	document.getElementById('page-' + getCurrentPagenum()).style.display = 'block';
+	document.getElementById('page-' + pagenum).style.display = 'block';
 
-	if (map_id) {
-		document.getElementById("geometry-text-field").innerHTML = getCurrentPagenum() in vector ? vector[getCurrentPagenum()].get('geometryText') : geometryText;
+	if (map_target) {
+		document.getElementById("geometry-text-field").innerHTML = has_vector_layer ? vector[pagenum].get('geometryText') : geometryText;
 
-		document.getElementById('undo-' + map_id).classList.remove('drawing-active');
+		document.getElementById('undo-' + map_target.id).classList.remove('drawing-active');
+
+		if (has_vector_layer) {
+			map_target.classList.remove('not-editing');
+			map_target.classList.add('editing');
+		}
+		else {
+			map_target.classList.remove('editing');
+			map_target.classList.add('not-editing');
+		}
 
 		removeInteractions();
 		addDrawingInteractions();
 	
-		setLayerVisibility(!(getCurrentPagenum() in vector) || vector[getCurrentPagenum()].get('single'));
-		updateControlButtons(map_id);
+		setLayerVisibility(!has_vector_layer || vector[pagenum].get('single'));
+		updateControlButtons(map_target.id);
 	}
 }
 
