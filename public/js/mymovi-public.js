@@ -53,6 +53,10 @@ function addMap(id, centerLon, centerLat, defaultZoom) {
 				zoom: defaultZoom,
 			}),
 		});
+
+		map.addControl(new ol.control.Control({
+			element: document.getElementById('mymovi-' + id + '-contents'),
+		}));
 	}
 
 	// Remove last point of LineString or Polygon

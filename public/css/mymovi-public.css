@@ -5,7 +5,7 @@ body {
 }
 
 .mymovi-map {
-  height: 400px;
+  height: 80vh;
   width: 100%;
   position: relative;
 }
@@ -14,14 +14,28 @@ body {
 	cursor: crosshair;
 }
 
-.mymovi-map.editing {
+.mymovi-map.editing .ol-layers {
 	opacity: 100%;
 	transition: opacity 1s;
 }
 
-.mymovi-map.not-editing {
+.mymovi-map.not-editing .ol-layers {
 	opacity: 50%;
 	transition: opacity 1s;
+}
+
+.mymovi-map-contents {
+	position: relative;
+	box-sizing: border-box;
+	height: calc(50% - 1em);
+	width: calc(100% - 2em);
+	top: 50%;
+	left: 1em;
+	padding: 1em;
+
+	background-color: white;
+	opacity: 100%;
+	overflow-y: auto;
 }
 
 /* MyMoVi form */
