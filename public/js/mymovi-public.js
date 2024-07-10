@@ -428,9 +428,14 @@ function showSubfields(id, target) {
 	const subfields = document.querySelectorAll('#mymovi-' + id + '-subfields div[data-mymovi-show-on]');
 
 	for (const field of subfields) {
-		if ((target.checked == undefined || target.checked) && field.dataset.mymoviShowOn.split('||').includes(target.value))
-			field.style.display = '';
-		else
-			field.style.display = 'none';
+		const correctValue = field.dataset.mymoviShowOn.split('||').includes(target.value);
+		const checked = (target.checked == undefined || target.checked);
+
+		if (target.type == 'checkbox') {
+			if (correctValue)
+				field.style.display = checked ? '' : 'none';
+		} else {
+			field.style.display = correctValue && checked ? '' : 'none';
+		}
 	}
 }
