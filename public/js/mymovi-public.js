@@ -55,11 +55,26 @@ function addMap(id, centerLon, centerLat, defaultZoom) {
 		});
 
 		const contents = document.getElementById('mymovi-' + id + '-contents');
+		const contents_wrapper = document.getElementById('mymovi-' + id + '-contents-wrapper');
+		const contents_toggle = document.getElementById('mymovi-' + id + '-contents-toggle');
 
 		if (contents.innerHTML.trim()) {
 			map.addControl(new ol.control.Control({
-				element: contents,
+				element: contents_wrapper,
 			}));
+
+			contents_wrapper.style.display = 'inherit';
+
+			contents_toggle.addEventListener('click', (e) => {
+				if (contents_wrapper.classList.contains('opened')) {
+					contents_wrapper.classList.remove('opened');
+					contents_wrapper.classList.add('closed');
+				} else {
+					contents_wrapper.classList.remove('closed');
+					contents_wrapper.classList.add('opened');
+				}
+				return false;
+			});
 		}
 	}
 
@@ -336,7 +351,7 @@ window.addEventListener("load", () => {
 		document.querySelectorAll('.mymovi-form-page .mymovi-button:not(.deactivated)').forEach((item) => {
 			item.onclick = (event) => {
 				event.preventDefault();
-				window.scrollTo(0, 0);
+				jQuery(item).scrollParent().scrollTop(0);
 				window.location.hash = document.querySelector('.mymovi-form-page.' + event.target.getAttribute('data-showpage')).getAttribute('id');
 			}
 		});

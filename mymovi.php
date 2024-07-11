@@ -521,8 +521,11 @@ function mymovi_the_map_shortcode($atts, $content) {
 		<div class="mymovi-form-the-map">';
 
 	$output .= "
-			<div id=\"mymovi-$name-contents\" class=\"mymovi-map-contents\">
-				$content
+			<div id=\"mymovi-$name-contents-wrapper\" class=\"mymovi-contents-wrapper opened\" style=\"display:none;\">
+				<a id=\"mymovi-$name-contents-toggle\" class=\"mymovi-contents-toggle\"></a>
+				<div id=\"mymovi-$name-contents\" class=\"mymovi-contents\">
+					$content
+				</div>
 			</div>";
 		
 	$output .= '

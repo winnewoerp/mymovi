@@ -24,18 +24,56 @@ body {
 	transition: opacity 1s;
 }
 
-.mymovi-map-contents {
-	position: relative;
-	box-sizing: border-box;
-	height: calc(50% - 1em);
-	width: calc(100% - 2em);
-	top: 50%;
+.mymovi-contents-wrapper {
+	position: absolute;
 	left: 1em;
+	bottom: 1em;
+
+	overflow-y: auto;
+}
+
+.mymovi-contents-wrapper.closed {
+	width: min-content;
+	height: min-content;
+}
+
+.mymovi-contents-wrapper.opened {
+	box-sizing: border-box;
+	width: calc(100% - 2em);
+	height: calc(50% - 1em);
 	padding: 1em;
 
-	background-color: white;
-	opacity: 100%;
-	overflow-y: auto;
+	background-color: var(--ol-background-color);
+}
+
+.mymovi-contents-toggle {
+	position: sticky;
+	text-decoration: none;
+	border: 1px solid var(--ol-subtle-foreground-color);
+	border-radius: 5px;
+	background-color: var(--ol-background-color);
+	text-align: center;
+
+	display: inline-block;
+	width: 1.375em;
+	height: 1.375em;
+	top: 0px;
+}
+
+.mymovi-contents-wrapper.closed .mymovi-contents-toggle:after {
+	content: "🞧";
+}
+
+.mymovi-contents-wrapper.opened .mymovi-contents-toggle:after {
+    content: "✖";
+}
+
+.mymovi-contents-wrapper.opened .mymovi-contents {
+	display: block;
+}
+
+.mymovi-contents-wrapper.closed .mymovi-contents {
+	display: none;
 }
 
 /* MyMoVi form */
