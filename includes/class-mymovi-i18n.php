@@ -26,7 +26,6 @@
  */
 class MyMoVi_i18n {
 
-
 	/**
 	 * Load the plugin text domain for translation.
 	 *
@@ -37,11 +36,9 @@ class MyMoVi_i18n {
 		load_plugin_textdomain(
 			'mymovi',
 			false,
-			dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages/'
+			dirname( plugin_basename( __FILE__ ), 2 ) . '/languages',
 		);
 
 	}
-
-
 
 }
