@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: MyMoVi\n"
-"POT-Creation-Date: 2024-05-29 00:07+0200\n"
-"PO-Revision-Date: 2024-05-29 00:11+0200\n"
+"POT-Creation-Date: 2024-07-16 16:32+0200\n"
+"PO-Revision-Date: 2024-07-16 16:32+0200\n"
 "Last-Translator: \n"
 "Language-Team: Stadtkreation\n"
 "Language: de\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.4.2\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
 "_n_noop:1,2;_c;_nc:4c,1,2;_x:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;_ex:1,2c;"
@@ -106,50 +106,50 @@ msgstr "Nächste"
 msgid "Page %1$s of %2$s"
 msgstr "Seite %1$s von %2$s"
 
-#: mymovi.php:216
+#: mymovi.php:216 mymovi.php:505
 msgid "Description"
 msgstr "Beschreibung"
 
-#: mymovi.php:245
+#: mymovi.php:244
 msgid "Location"
 msgstr "Ort"
 
-#: mymovi.php:246
+#: mymovi.php:245
 msgid "Route"
 msgstr "Route"
 
-#: mymovi.php:247
+#: mymovi.php:246
 msgid "Radius"
 msgstr "Radius"
 
-#: mymovi.php:248
+#: mymovi.php:247
 msgid "Area"
 msgstr "Fläche"
 
-#: mymovi.php:249
+#: mymovi.php:248
 msgid "None"
 msgstr "Keiner"
 
-#: mymovi.php:294
+#: mymovi.php:314 mymovi.php:439
 msgid "Please select"
 msgstr "Bitte auswählen"
 
-#: mymovi.php:352
+#: mymovi.php:533
 msgid "Edit text or delete"
 msgstr "Text bearbeiten oder löschen"
 
-#: mymovi.php:353
-msgid "Remove last point"
-msgstr "Letzten Punkt entfernen"
-
-#: mymovi.php:355
+#: mymovi.php:534
 msgid "Modify features"
 msgstr "Features bearbeiten"
 
-#: mymovi.php:362
+#: mymovi.php:535
+msgid "Remove last point"
+msgstr "Letzten Punkt entfernen"
+
+#: mymovi.php:543
 msgid "Save and close"
 msgstr "Speichern und schließen"
 
-#: mymovi.php:363
+#: mymovi.php:544
 msgid "Delete feature"
 msgstr "Feature löschen"
