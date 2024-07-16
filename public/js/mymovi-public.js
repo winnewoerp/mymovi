@@ -403,7 +403,7 @@ function showPage(pagenum = getCurrentPagenum()) {
 		removeInteractions();
 		addDrawingInteractions();
 	
-		setLayerVisibility(!has_vector_layer || vector[pagenum].get('single'));
+		setLayerVisibility(has_vector_layer && vector[pagenum].get('single'));
 		updateControlButtons(map_target.id);
 	}
 }
