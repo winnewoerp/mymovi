@@ -76,6 +76,14 @@ function addMap(id, centerLon, centerLat, defaultZoom) {
 				return false;
 			});
 		}
+
+		map.addControl(new ol.control.Control({
+			element: document.getElementById('mymovi-'+id+'-control-buttons'),
+		}));
+
+		map.addControl(new ol.control.Control({
+			element: document.getElementById('mymovi-'+id+'-properties-input'),
+		}));
 	}
 
 	// Remove last point of LineString or Polygon

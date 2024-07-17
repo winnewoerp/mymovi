@@ -96,12 +96,15 @@ body {
   margin-top: 1.5rem;
 }
 
+.map-control-buttons {
+	margin: 1rem 1rem 1rem 3rem;
+}
+
 .properties-input {
   display: none;
-  position: absolute;
-  top: 2rem;
-  left: 2rem;
-  height: calc(100% - 4rem);
+  position: relative;
+  margin: 0 2rem 2rem 2rem;
+  height: calc(100% - 7rem);
   width: calc(100% - 4rem);
   z-index: 1;
   padding: 1rem;

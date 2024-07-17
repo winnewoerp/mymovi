@@ -527,23 +527,24 @@ function mymovi_the_map_shortcode($atts, $content) {
 					$content
 				</div>
 			</div>";
-		
+
 	$output .= '
-			<div class="map-control-buttons">
+			<div class="map-control-buttons" id="mymovi-' . $name . '-control-buttons">
 				<input class="form-control edit-button" type="button" value="✐ ' . esc_html__('Edit text or delete', 'mymovi') . '" id="mymovi-button-select-' . $name .'">
 				<input class="form-control modify-button" type="button" value="✐ ' . esc_html__('Modify features', 'mymovi') . '" id="mymovi-button-modify-'. $name .'" autocomplete="off">
 				<input class="form-control remove-last-point" type="button" value="⌫ ' . esc_html__('Remove last point','mymovi') . '" id="undo-' . $name  . '">
 			</div>
-			<div class="mymovi-form-field mymovi-map map-field type-map" id="' . $name . '">
-				<div class="properties-input">
-					<p>
-						<label id="geometry-text-field" for="mymovi-property-description-'. $name .'">' .$a['geometry-text-field'] . '</label>
-						<textarea id="mymovi-property-description-' . $name . '" name="mymovi-property-description-' . $name . '"></textarea>
-					</p>
-					<p class="close-wrapper"><a href="#" class="close">' . esc_html__('Save and close','mymovi') . '</a></p>
-					<p class="delete-feature-warpper"><a href="#" class="delete-feature">' . esc_html__('Delete feature','mymovi') . '</a></p>
-				</div>
-			</div>
+			<div class="properties-input" id="mymovi-' . $name . '-properties-input">
+				<p>
+					<label id="geometry-text-field" for="mymovi-property-description-'. $name .'">' .$a['geometry-text-field'] . '</label>
+					<textarea id="mymovi-property-description-' . $name . '" name="mymovi-property-description-' . $name . '"></textarea>
+				</p>
+				<p class="close-wrapper"><a href="#" class="close">' . esc_html__('Save and close','mymovi') . '</a></p>
+				<p class="delete-feature-warpper"><a href="#" class="delete-feature">' . esc_html__('Delete feature','mymovi') . '</a></p>
+			</div>';
+		
+	$output .= '
+			<div class="mymovi-form-field mymovi-map map-field type-map" id="' . $name . '"></div>
 			<input type="hidden" name="mymovi-field-' . $name . '-geojson" id="' . $name . '-geojson" value="'. str_replace("\"", "&quot;", $a['features']) .'"></p>
 			<script> addMap("' . $name . '", ' . $a['map-center-lon'] . ', ' . $a['map-center-lat'] . ', ' . $a['map-default-zoom'] . ');
 			const GEOMETRY_TEXT = "'. $a['geometry-text-field'] .'"; </script>
