@@ -226,6 +226,7 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 			'step' => '',
 			'color' => 'rgb(230, 19, 126)',
 			'icon' => plugin_dir_url( __FILE__ ) . 'images/draw-in-map.png',
+			'icon-text' => esc_html__('Map input','mymovi'),
 			'single-layer' => 'false',
 			'show-on'=>'',
 		),
@@ -370,10 +371,13 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 			
 			if($a['icon']) {
 				$output .= '
-				<div class="map-icon" style="background:' . $a['color'] . '">
-					<div class="map-icon-inner">
-						<img src="' . $a['icon'] . '" alt="map icon ' . $a['name'] . '">
+				<div class="map-icon-outer">
+					<div class="map-icon" style="background:' . $a['color'] . '">
+						<div class="map-icon-inner">
+							<img src="' . $a['icon'] . '" alt="map icon ' . $a['name'] . '">
+						</div>
 					</div>
+					' . $a['icon-text'].'
 				</div>';
 			}
 			
@@ -386,13 +390,13 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 						<option value="' . $geometry . '">' . $geometry_labels[$geometry] . '</option>';
 				}
 				$output .= '
-					</select>';
+					</select></p>';
 			} else {
 				$output .= '
 					<input type="hidden" id="select-geometry-type-' . $name . '" name="geometry-type" value="'. $geometries[0] .'">';
 			}
 			$output .= '
-				<input type="hidden" name="mymovi-field-' . $name . '-geojson" id="' . $name . '-geojson" value="'. str_replace("\"", "&quot;", $a['features']) .'"></p>
+				<input type="hidden" name="mymovi-field-' . $name . '-geojson" id="' . $name . '-geojson" value="'. str_replace("\"", "&quot;", $a['features']) .'">
 				<script type="text/javascript"> document.addEventListener("DOMContentLoaded", () => {addLayer("' . $name . '", "' . $a['color'] . '", '. $a['single-layer'] .', "'. $a['geometry-text-field'] .'");});</script>
 			</div>';
 

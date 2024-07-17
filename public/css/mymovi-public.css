@@ -124,6 +124,11 @@ body {
 	display: inline-block;
 }
 
+.mymovi-form .map-icon-outer {
+	display: flex;
+	align-items: center;
+}
+
 .mymovi-form .map-icon {
 	height: 80px;
 	width: 80px;
@@ -131,7 +136,7 @@ body {
 	border-radius: 10px;
 	padding: 10px;
 	display: table;
-	margin-bottom: 20px;
+	margin-right: 1rem;
 }
 
 .mymovi-form .map-icon-inner {

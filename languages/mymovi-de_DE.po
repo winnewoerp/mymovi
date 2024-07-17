@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: MyMoVi\n"
-"POT-Creation-Date: 2024-07-16 16:32+0200\n"
-"PO-Revision-Date: 2024-07-16 16:32+0200\n"
+"POT-Creation-Date: 2024-07-17 16:09+0200\n"
+"PO-Revision-Date: 2024-07-17 16:09+0200\n"
 "Last-Translator: \n"
 "Language-Team: Stadtkreation\n"
 "Language: de\n"
@@ -106,50 +106,54 @@ msgstr "Nächste"
 msgid "Page %1$s of %2$s"
 msgstr "Seite %1$s von %2$s"
 
-#: mymovi.php:216 mymovi.php:505
+#: mymovi.php:216 mymovi.php:509
 msgid "Description"
 msgstr "Beschreibung"
 
-#: mymovi.php:244
+#: mymovi.php:229
+msgid "Map input"
+msgstr "Karteneintrag"
+
+#: mymovi.php:245
 msgid "Location"
 msgstr "Ort"
 
-#: mymovi.php:245
+#: mymovi.php:246
 msgid "Route"
 msgstr "Route"
 
-#: mymovi.php:246
+#: mymovi.php:247
 msgid "Radius"
 msgstr "Radius"
 
-#: mymovi.php:247
+#: mymovi.php:248
 msgid "Area"
 msgstr "Fläche"
 
-#: mymovi.php:248
+#: mymovi.php:249
 msgid "None"
 msgstr "Keiner"
 
-#: mymovi.php:314 mymovi.php:439
+#: mymovi.php:315 mymovi.php:443
 msgid "Please select"
 msgstr "Bitte auswählen"
 
-#: mymovi.php:533
+#: mymovi.php:537
 msgid "Edit text or delete"
 msgstr "Text bearbeiten oder löschen"
 
-#: mymovi.php:534
+#: mymovi.php:538
 msgid "Modify features"
 msgstr "Features bearbeiten"
 
-#: mymovi.php:535
+#: mymovi.php:539
 msgid "Remove last point"
 msgstr "Letzten Punkt entfernen"
 
-#: mymovi.php:543
+#: mymovi.php:546
 msgid "Save and close"
 msgstr "Speichern und schließen"
 
-#: mymovi.php:544
+#: mymovi.php:547
 msgid "Delete feature"
 msgstr "Feature löschen"
