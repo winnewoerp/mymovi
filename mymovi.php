@@ -225,7 +225,7 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 			'max' => '',
 			'step' => '',
 			'color' => 'rgb(230, 19, 126)',
-			'icon' => '',
+			'icon' => plugin_dir_url( __FILE__ ) . 'images/draw-in-map.png',
 			'single-layer' => 'false',
 			'show-on'=>'',
 		),
