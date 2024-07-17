@@ -543,8 +543,8 @@ function mymovi_the_map_shortcode($atts, $content) {
 					<label id="geometry-text-field" for="mymovi-property-description-'. $name .'">' .$a['geometry-text-field'] . '</label>
 					<textarea id="mymovi-property-description-' . $name . '" name="mymovi-property-description-' . $name . '"></textarea>
 				</p>
-				<p class="wp-block-button close-wrapper"><a href="#" class="wp-block-button__link wp-element-button close">' . esc_html__('Save and close','mymovi') . '</a></p>
-				<p class="wp-block-button delete-feature-warpper"><a href="#" class="wp-block-button__link wp-element-button delete-feature">' . esc_html__('Delete feature','mymovi') . '</a></p>
+				<p class="close-wrapper"><input type="button" class="close" value="' . esc_html__('Save and close','mymovi') . '"></p>
+				<p class="delete-feature-warpper"><input type="button" class="delete-feature" value="' . esc_html__('Delete feature','mymovi') . '"></p>
 			</div>';
 		
 	$output .= '
