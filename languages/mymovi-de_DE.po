@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: MyMoVi\n"
-"POT-Creation-Date: 2024-07-17 16:09+0200\n"
-"PO-Revision-Date: 2024-07-17 16:09+0200\n"
+"POT-Creation-Date: 2024-07-18 12:56+0200\n"
+"PO-Revision-Date: 2024-07-18 12:56+0200\n"
 "Last-Translator: \n"
 "Language-Team: Stadtkreation\n"
 "Language: de\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.0.1\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
 "_n_noop:1,2;_c;_nc:4c,1,2;_x:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;_ex:1,2c;"
@@ -19,141 +19,161 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: mymovi.php:46
+#: mymovi.php:50
 msgid "Survey entry"
 msgstr "Fragebogen-Eintrag"
 
-#: mymovi.php:47
+#: mymovi.php:51
 msgid "Survey entries"
 msgstr "Fragebogen-Einträge"
 
-#: mymovi.php:57
+#: mymovi.php:61
 msgctxt "mymoviproposal"
 msgid "Add New"
 msgstr "Erstellen"
 
-#: mymovi.php:58
+#: mymovi.php:62
 #, php-format
 msgid "Add New %s"
 msgstr "Neuen %s hinzufügen"
 
-#: mymovi.php:59
+#: mymovi.php:63
 #, php-format
 msgid "New %s"
 msgstr "Neuer %s"
 
-#: mymovi.php:60
+#: mymovi.php:64
 #, php-format
 msgid "Edit %s"
 msgstr "%s bearbeiten"
 
-#: mymovi.php:61
+#: mymovi.php:65
 #, php-format
 msgid "View %s"
 msgstr "%s ansehen"
 
-#: mymovi.php:62
+#: mymovi.php:66
 #, php-format
 msgid "All %s"
 msgstr "Alle %s"
 
-#: mymovi.php:63
+#: mymovi.php:67
 #, php-format
 msgid "Search %s"
 msgstr "%s suchen"
 
-#: mymovi.php:64
+#: mymovi.php:68
 #, php-format
 msgid "Parent %s:"
 msgstr "Übergeordneter %s:"
 
-#: mymovi.php:65
+#: mymovi.php:69
 #, php-format
 msgid "No %s found."
 msgstr "Keine %s gefunden."
 
-#: mymovi.php:66
+#: mymovi.php:70
 #, php-format
 msgid "No %s found in Trash."
 msgstr "Keine %s im Papierkorb gefunden."
 
-#: mymovi.php:97
+#: mymovi.php:105
 msgid "Next pages not yet activated"
 msgstr "Die nächsten Seiten wurde noch nicht aktiviert"
 
-#: mymovi.php:109
+#: mymovi.php:135
 msgid "You have successfully submitted your data."
 msgstr "Du hast deine Daten erfolgreich übermittelt."
 
-#: mymovi.php:113
+#: mymovi.php:140
 msgid "Entry"
 msgstr "Eintrag"
 
-#: mymovi.php:147
+#: mymovi.php:181
 msgid "Submit data"
 msgstr "Daten absenden"
 
-#: mymovi.php:158
+#: mymovi.php:192
 msgid "Prev"
 msgstr "Vorherige"
 
-#: mymovi.php:169
+#: mymovi.php:203
 msgid "Next"
 msgstr "Nächste"
 
-#: mymovi.php:184
+#: mymovi.php:218
 #, php-format
 msgid "Page %1$s of %2$s"
 msgstr "Seite %1$s von %2$s"
 
-#: mymovi.php:216 mymovi.php:509
+#: mymovi.php:258 mymovi.php:571
 msgid "Description"
 msgstr "Beschreibung"
 
-#: mymovi.php:229
+#: mymovi.php:271
 msgid "Map input"
 msgstr "Karteneintrag"
 
-#: mymovi.php:245
+#: mymovi.php:288
 msgid "Location"
 msgstr "Ort"
 
-#: mymovi.php:246
+#: mymovi.php:288
+msgid "Locations"
+msgstr "Orte"
+
+#: mymovi.php:289
 msgid "Route"
 msgstr "Route"
 
-#: mymovi.php:247
+#: mymovi.php:289
+msgid "Routes"
+msgstr "Routen"
+
+#: mymovi.php:290
 msgid "Radius"
 msgstr "Radius"
 
-#: mymovi.php:248
+#: mymovi.php:290
+msgid "Radii"
+msgstr "Radien"
+
+#: mymovi.php:291
 msgid "Area"
 msgstr "Fläche"
 
-#: mymovi.php:249
+#: mymovi.php:291
+msgid "Areas"
+msgstr "Flächen"
+
+#: mymovi.php:292
 msgid "None"
 msgstr "Keiner"
 
-#: mymovi.php:315 mymovi.php:443
+#: mymovi.php:358 mymovi.php:502
 msgid "Please select"
 msgstr "Bitte auswählen"
 
-#: mymovi.php:537
+#: mymovi.php:438
+msgid "Please select the desired map entry type"
+msgstr "Bitte wähle den gewünschten Karteneintragstypen"
+
+#: mymovi.php:611
 msgid "Edit text or delete"
 msgstr "Text bearbeiten oder löschen"
 
-#: mymovi.php:538
+#: mymovi.php:612
 msgid "Modify features"
 msgstr "Features bearbeiten"
 
-#: mymovi.php:539
+#: mymovi.php:613
 msgid "Remove last point"
 msgstr "Letzten Punkt entfernen"
 
-#: mymovi.php:546
+#: mymovi.php:620
 msgid "Save and close"
 msgstr "Speichern und schließen"
 
-#: mymovi.php:547
+#: mymovi.php:621
 msgid "Delete feature"
 msgstr "Feature löschen"

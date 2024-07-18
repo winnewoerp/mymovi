@@ -1,3 +1,8 @@
+﻿:root {
+	--mymovi-primary-color: #005da7;
+	--mymovi-secondary-color: #e6137e;
+}
+	
 html,
 body {
   margin: 0;
@@ -82,6 +87,28 @@ body {
 	display: flex;
 }
 
+.mymovi-form button,
+.mymovi-form-the-map input[type="button"],
+.mymovi-form input[type="submit"],
+.mymovi-form .wp-block-button a,
+.mymovi-form .wp-block-button__link,
+.mymovi-form .button {
+	background: var(--mymovi-primary-color);
+}
+
+.mymovi-form button:hover,
+.mymovi-form button:focus,
+.mymovi-form-the-map input[type="button"]:hover,
+.mymovi-form input[type="submit"]:hover,
+.mymovi-form .wp-block-button a:hover,
+.mymovi-form .wp-block-button a:focus,
+.mymovi-form .wp-block-button__link:hover,
+.mymovi-form .wp-block-button__link:focus,
+.mymovi-form .button:hover,
+.mymovi-form .button:focus {
+	background: var(--mymovi-secondary-color);
+}
+
 .mymovi-form .mymovi-nav-wrapper .mymovi-nav.prev {
 	width: 50%;
 }
@@ -127,6 +154,7 @@ body {
 .mymovi-form .map-icon-outer {
 	display: flex;
 	align-items: center;
+	margin-bottom: 1rem;
 }
 
 .mymovi-form .map-icon {
@@ -165,4 +193,24 @@ body {
   
 .mymovi-form-field input[type="range"] {
 	margin: 0;
+}
+
+/* MyMoVi style for original ol controls */
+
+.ol-control button {
+	color: white;
+	background: var(--mymovi-primary-color);
+	outline: none !important;
+	border-radius: 0 !important;
+	margin: 0;
+}
+
+.ol-control button.ol-zoom-in {
+	margin-bottom: 3px;
+}
+
+.ol-control button:hover,
+.ol-control button:focus {
+	color: white;
+	background: var(--mymovi-secondary-color);
 }

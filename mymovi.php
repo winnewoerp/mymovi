@@ -3,7 +3,7 @@
 Plugin Name: MyMoVi - My Mobility Vision
 Plugin URI: https://perimobil.linieplus.de
 Description: A tool for participatory mobility vision creation.
-Version: 0.4
+Version: 0.5
 Requires at least: 6.1.1
 Requires PHP: 8.0
 Author: Linie Plus, Stadtkreation, and Perimobil project team
@@ -38,6 +38,10 @@ if ( is_admin() ) {
     require_once __DIR__ . '/admin/class-mymovi-admin.php';
 }
 
+
+/**
+ * init MyMoVi survey entry post type 
+ */
 function mymovi_posttype_init() {
 	$mymovi_posttypes = array(
 		array(
@@ -88,33 +92,57 @@ function mymovi_posttype_init() {
 }
 add_action( 'init', 'mymovi_posttype_init' );
 
+/**
+ * MyMoVi form shortcode
+ */
 function mymovi_form_shortcode($atts, $content) {
 	$output = '';
 	
+	// extract shortcode attributes
 	$a = shortcode_atts( 
 		array(
 			'stop-at-page' => 9999,
 			'stop-at-page-text' => esc_html__('Next pages not yet activated','mymovi'),
+			'fgcolor' => null,
+			'bgcolor' => null,
 		), 
 		$atts
 	);
-		
+	
+	// output inline CSS if fgcolor or bgcolor present as attributes
+	if($a['fgcolor'] || $a['bgcolor']) {
+		$output .= '
+	<style>
+		:root { ' . ($a['fgcolor'] ? '
+			--mymovi-primary-color: ' . $a['fgcolor'] . ';' : '') . ($a['bgcolor'] ? '
+			--mymovi-secondary-color: ' . $a['bgcolor'] . ';' : '') . '
+		}
+	</style>';
+	}		
+	
+	// explode shortcode content to single form pages with [mymovi-form-pagebreak] as delimiter
 	$form_pages = explode('[mymovi-form-pagebreak]', $content);
 	
-	$err = false;
+	// TBD: Error handling
+	// $err = false;
 	
+	// handle form submit
 	if(isset($_POST['mymovi-submit']) && $_POST['mymovi-submit']) {
+		
+		// output submit success message
 		$output .= '
 		<div class="mymovi-message success">
 			<p>' . esc_html__('You have successfully submitted your data.', 'mymovi') . '</p>
 		</div>';
 		
+		// setup post object with submitted data
 		$post = array(
 			'post_title'	=> esc_html__('Entry','mymovi') . ' ' . current_datetime()->format('Y-m-d H:i:s'),
 			'post_status'	=> 'draft',
 			'post_type'	=> 'mymovi-survey-entry'
 		);
 		
+		// insert new post with contents from post object
 		$postid = wp_insert_post($post);
 		
 		// add custom field with title of current survey
@@ -128,7 +156,11 @@ function mymovi_form_shortcode($atts, $content) {
 			}
 		}
 	}
+	
+	// form output if not submitted
 	else {
+		
+		// output opening form HTML
 		$output .= '
 		<div class="wp-block-group has-global-padding">
 			<form class="mymovi-form" method="post" action="">
@@ -136,6 +168,8 @@ function mymovi_form_shortcode($atts, $content) {
 					<div id="page-1" class="mymovi-form-page page-1">
 				';
 		$index = 1;
+		
+		// loop over form pages for form field and content outputs
 		foreach($form_pages as $form_page) {
 			$output .= do_shortcode($form_page);
 			
@@ -191,11 +225,15 @@ function mymovi_form_shortcode($atts, $content) {
 					<div id="page-' . ($index + 1) . '" class="mymovi-form-page page-' . ($index + 1) . '">';
 			}
 			
+			// break if shortcode att for pagebreak present for this index value
 			if($index == $a['stop-at-page']) break;
 			
+			// increas index form loop
 			$index++;
 			
 		}
+		
+		// output closing form HTML
 		$output .= '
 					</div>
 				</div>
@@ -207,9 +245,13 @@ function mymovi_form_shortcode($atts, $content) {
 }
 add_shortcode('mymovi-form', 'mymovi_form_shortcode');
 
+/**
+ * MyMoVi form field shortcode
+ */
 function mymovi_form_field_shortcode($atts, $content, $tag) {
 	$output = '';
 	
+	// extract shortcode attributes
 	$a = shortcode_atts( 
 		array(
 			'type' => 'text',
@@ -233,6 +275,7 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 		$atts
 	);
 	
+	// set field to required if shortcode tag contains * 
 	$required = '';
 	if(str_contains($tag, '*')) $required = ' required';
 	
@@ -242,11 +285,11 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 	$geometries = explode(',', $a['geometries']);
 	
 	$geometry_labels = array(
-		'Point' => esc_html__('Location', 'mymovi'),
-		'LineString' => esc_html__('Route', 'mymovi'),
-		'Circle' => esc_html__('Radius', 'mymovi'),
-		'Polygon' => esc_html__('Area', 'mymovi'),
-		'None' => esc_html__('None', 'mymovi')
+		'Point' => array(esc_html__('Location', 'mymovi'), esc_html__('Locations', 'mymovi')),
+		'LineString' => array(esc_html__('Route', 'mymovi'), esc_html__('Routes', 'mymovi')),
+		'Circle' => array(esc_html__('Radius', 'mymovi'), esc_html__('Radii', 'mymovi')),
+		'Polygon' => array(esc_html__('Area', 'mymovi'), esc_html__('Areas', 'mymovi')),
+		'None' => array(esc_html__('None', 'mymovi'), esc_html__('None', 'mymovi'))
 	);
 	
 	$type = 'text';
@@ -370,6 +413,15 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 			<div class="mymovi-form-map-wrapper" id="'. $name .'">';
 			
 			if($a['icon']) {
+				$icon_types = [];
+				foreach($geometries as $geometry) {
+					$geometry = trim($geometry);
+					if(array_key_exists($geometry,$geometry_labels)) {
+						$icon_types[] = $geometry_labels[$geometry][1];
+					}
+				}
+				$icon_types_text = implode(', ', $icon_types);
+				
 				$output .= '
 				<div class="map-icon-outer">
 					<div class="map-icon" style="background:' . $a['color'] . '">
@@ -377,17 +429,21 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 							<img src="' . $a['icon'] . '" alt="map icon ' . $a['name'] . '">
 						</div>
 					</div>
-					' . $a['icon-text'].'
+					' . $a['icon-text'] . ' (' . $icon_types_text . ')
 				</div>';
 			}
 			
 			if (count($geometries) > 1) {
 				$output .= '
-					<p><select class="form-select select-drawing-tools" id="select-geometry-type-' . $name . '" name="geometry-type">';
+					<p>' . esc_html__('Please select the desired map entry type','mymovi') . '<br>
+					<select class="form-select select-drawing-tools" id="select-geometry-type-' . $name . '" name="geometry-type">';
 				
 				foreach($geometries as $geometry) {
-					$output .= '
-						<option value="' . $geometry . '">' . $geometry_labels[$geometry] . '</option>';
+					$geometry = trim($geometry);
+					if(array_key_exists($geometry,$geometry_labels)) {
+						$output .= '
+						<option value="' . $geometry . '">' . $geometry_labels[$geometry][1] . '</option>';
+					}
 				}
 				$output .= '
 					</select></p>';
@@ -409,6 +465,9 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 add_shortcode('mymovi-form-field','mymovi_form_field_shortcode');
 add_shortcode('mymovi-form-field*','mymovi_form_field_shortcode');
 
+/**
+ * MyMoVi form field subfields shortcode
+ */
 function mymovi_form_field_subfields_shortcode($atts, $content) {
 	$output = '';
 	
@@ -501,6 +560,9 @@ function mymovi_form_field_subfields_shortcode($atts, $content) {
 }
 add_shortcode('mymovi-form-field-subfields','mymovi_form_field_subfields_shortcode');
 
+/**
+ * MyMoVi form the map shortcode
+ */
 function mymovi_the_map_shortcode($atts, $content) {
 	$output = '';
 	
@@ -512,9 +574,21 @@ function mymovi_the_map_shortcode($atts, $content) {
 			'map-center-lat' => 51.34671,
 			'map-default-zoom' => 12,
 			'name' => '',
+			'fgcolor' => null,
+			'bgcolor' => null
 		),
 		$atts
 	);
+	
+	if($a['fgcolor'] || $a['bgcolor']) {
+		$output .= '
+	<style>
+		:root { ' . ($a['fgcolor'] ? '
+			--mymovi-primary-color: ' . $a['fgcolor'] . ';' : '') . ($a['bgcolor'] ? '
+			--mymovi-secondary-color: ' . $a['bgcolor'] . ';' : '') . '
+		}
+	</style>';
+	}	
 	
 	$name = $a['name'];
 	if(is_array($atts) && $atts) {
