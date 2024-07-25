@@ -1,0 +1,57 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "mymovi/form-input",
+	"version": "0.1.0",
+	"title": "Mymovi Form Input",
+	"category": "widgets",
+	"description": "MyMoVi form input block.",
+	"example": {},
+	"attributes": {
+		"type": {
+			"type": "object"
+		},
+		"name": {
+			"type": "string"
+		},
+		"options": {
+			"type": "array"
+		},
+		"option_texts": {
+			"type": "array"
+		},
+		"label": {
+			"type": "string"
+		},
+		"minlength": {
+			"type": "integer"
+		},
+		"maxlength": {
+			"type": "integer"
+		},
+		"min": {
+			"type": "number"
+		},
+		"max": {
+			"type": "number"
+		},
+		"step": {
+			"type": "number"
+		},
+		"required": {
+			"type": "boolean"
+		}
+	},
+	"supports": {
+		"color": {
+			"text": true
+		},
+		"html": false,
+		"typography": {
+			"fontSize": true
+		}
+	},
+	"textdomain": "mymovi",
+	"editorScript": "file:./index.js",
+	"style": "file:./style-index.css"
+}

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: MyMoVi\n"
-"POT-Creation-Date: 2024-07-18 12:56+0200\n"
-"PO-Revision-Date: 2024-07-18 12:56+0200\n"
+"POT-Creation-Date: 2024-07-25 15:04+0200\n"
+"PO-Revision-Date: 2024-07-25 15:04+0200\n"
 "Last-Translator: \n"
 "Language-Team: Stadtkreation\n"
 "Language: de\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.4.2\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
 "_n_noop:1,2;_c;_nc:4c,1,2;_x:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;_ex:1,2c;"
@@ -18,6 +18,92 @@ msgstr ""
 "esc_html_x:1,2c\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: blocks/*/node_modules/*\n"
+
+#: blocks/mymovi-form-input/src/edit.js:30
+#: blocks/mymovi-form-input/src/edit.js:44
+msgid "Text"
+msgstr "Text"
+
+#: blocks/mymovi-form-input/src/edit.js:48
+msgid "Textarea"
+msgstr "Textbox"
+
+#: blocks/mymovi-form-input/src/edit.js:52
+msgid "Number"
+msgstr "Nummer"
+
+#: blocks/mymovi-form-input/src/edit.js:56
+msgid "Slider"
+msgstr "Schieberegler"
+
+#: blocks/mymovi-form-input/src/edit.js:60
+msgid "Selection"
+msgstr "Auswahl"
+
+#: blocks/mymovi-form-input/src/edit.js:64
+msgid "Checkboxes"
+msgstr "Checkboxen"
+
+#: blocks/mymovi-form-input/src/edit.js:68
+msgid "Radio buttons"
+msgstr "Radio-Buttons"
+
+#: blocks/mymovi-form-input/src/edit.js:75
+msgid "Form Field Settings"
+msgstr "Fragebogen-Feld Einstellungen"
+
+#: blocks/mymovi-form-input/src/edit.js:77
+msgid "Field type"
+msgstr "Eingabefeld-Typ"
+
+#: blocks/mymovi-form-input/src/edit.js:85
+msgid "Internal Name (Unique)"
+msgstr "Interner Name (Einzigartig)"
+
+#: blocks/mymovi-form-input/src/edit.js:92
+msgid "Label"
+msgstr "Label"
+
+#: blocks/mymovi-form-input/src/edit.js:101
+msgid "Options (internal names)"
+msgstr "Auswahlmöglichkeiten (interne Namen)"
+
+#: blocks/mymovi-form-input/src/edit.js:108
+msgid "Option names"
+msgstr "Auswahlmöglichkeiten"
+
+#: blocks/mymovi-form-input/src/edit.js:119
+msgid "Minimum Length"
+msgstr "Mindestlänge"
+
+#: blocks/mymovi-form-input/src/edit.js:126
+msgid "Maxmium Length"
+msgstr "Maximallänge"
+
+#: blocks/mymovi-form-input/src/edit.js:137
+msgid "Minimum Input"
+msgstr "Mindesteingabe"
+
+#: blocks/mymovi-form-input/src/edit.js:144
+msgid "Maximum Input"
+msgstr "Maximaleingabe"
+
+#: blocks/mymovi-form-input/src/edit.js:151
+msgid "Step Size"
+msgstr "Schrittgröße"
+
+#: blocks/mymovi-form-input/src/edit.js:162
+msgid "Required"
+msgstr "Pflichtfeld"
+
+#: blocks/mymovi-form-input/src/edit.js:162
+msgid "(requires all checkboxes to be checked)"
+msgstr "(alle Checkboxen müssen ausgewählt werden)"
+
+#: blocks/mymovi-form-input/src/edit.js:238 mymovi.php:363 mymovi.php:507
+msgid "Please select"
+msgstr "Bitte auswählen"
 
 #: mymovi.php:50
 msgid "Survey entry"
@@ -77,103 +163,99 @@ msgstr "Keine %s gefunden."
 msgid "No %s found in Trash."
 msgstr "Keine %s im Papierkorb gefunden."
 
-#: mymovi.php:105
+#: mymovi.php:110
 msgid "Next pages not yet activated"
 msgstr "Die nächsten Seiten wurde noch nicht aktiviert"
 
-#: mymovi.php:135
+#: mymovi.php:140
 msgid "You have successfully submitted your data."
 msgstr "Du hast deine Daten erfolgreich übermittelt."
 
-#: mymovi.php:140
+#: mymovi.php:145
 msgid "Entry"
 msgstr "Eintrag"
 
-#: mymovi.php:181
+#: mymovi.php:186
 msgid "Submit data"
 msgstr "Daten absenden"
 
-#: mymovi.php:192
+#: mymovi.php:197
 msgid "Prev"
 msgstr "Vorherige"
 
-#: mymovi.php:203
+#: mymovi.php:208
 msgid "Next"
 msgstr "Nächste"
 
-#: mymovi.php:218
+#: mymovi.php:223
 #, php-format
 msgid "Page %1$s of %2$s"
 msgstr "Seite %1$s von %2$s"
 
-#: mymovi.php:258 mymovi.php:571
+#: mymovi.php:263 mymovi.php:576
 msgid "Description"
 msgstr "Beschreibung"
 
-#: mymovi.php:271
+#: mymovi.php:276
 msgid "Map input"
 msgstr "Karteneintrag"
 
-#: mymovi.php:288
+#: mymovi.php:293
 msgid "Location"
 msgstr "Ort"
 
-#: mymovi.php:288
+#: mymovi.php:293
 msgid "Locations"
 msgstr "Orte"
 
-#: mymovi.php:289
+#: mymovi.php:294
 msgid "Route"
 msgstr "Route"
 
-#: mymovi.php:289
+#: mymovi.php:294
 msgid "Routes"
 msgstr "Routen"
 
-#: mymovi.php:290
+#: mymovi.php:295
 msgid "Radius"
 msgstr "Radius"
 
-#: mymovi.php:290
+#: mymovi.php:295
 msgid "Radii"
 msgstr "Radien"
 
-#: mymovi.php:291
+#: mymovi.php:296
 msgid "Area"
 msgstr "Fläche"
 
-#: mymovi.php:291
+#: mymovi.php:296
 msgid "Areas"
 msgstr "Flächen"
 
-#: mymovi.php:292
+#: mymovi.php:297
 msgid "None"
 msgstr "Keiner"
 
-#: mymovi.php:358 mymovi.php:502
-msgid "Please select"
-msgstr "Bitte auswählen"
-
-#: mymovi.php:438
+#: mymovi.php:443
 msgid "Please select the desired map entry type"
 msgstr "Bitte wähle den gewünschten Karteneintragstypen"
 
-#: mymovi.php:611
+#: mymovi.php:616
 msgid "Edit text or delete"
 msgstr "Text bearbeiten oder löschen"
 
-#: mymovi.php:612
+#: mymovi.php:617
 msgid "Modify features"
 msgstr "Features bearbeiten"
 
-#: mymovi.php:613
+#: mymovi.php:618
 msgid "Remove last point"
 msgstr "Letzten Punkt entfernen"
 
-#: mymovi.php:620
+#: mymovi.php:625
 msgid "Save and close"
 msgstr "Speichern und schließen"
 
-#: mymovi.php:621
+#: mymovi.php:626
 msgid "Delete feature"
 msgstr "Feature löschen"

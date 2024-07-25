@@ -180,21 +180,6 @@ body {
 	width: auto;
 }
 
-.mymovi-form-field datalist {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	writing-mode: vertical-lr;
-}
-
-.mymovi-form-field datalist option {
-	padding: 0;
-}
-  
-.mymovi-form-field input[type="range"] {
-	margin: 0;
-}
-
 /* MyMoVi style for original ol controls */
 
 .ol-control button {

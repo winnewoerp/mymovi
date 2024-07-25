@@ -92,6 +92,11 @@ function mymovi_posttype_init() {
 }
 add_action( 'init', 'mymovi_posttype_init' );
 
+function mymovi_blocks_init() {
+	register_block_type( __DIR__ . '/blocks/mymovi-form-input/build');
+}
+add_action( 'init', 'mymovi_blocks_init' );
+
 /**
  * MyMoVi form shortcode
  */
