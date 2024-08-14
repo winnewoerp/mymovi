@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: MyMoVi\n"
-"POT-Creation-Date: 2024-07-25 15:05+0200\n"
-"PO-Revision-Date: 2024-07-25 15:07+0200\n"
+"POT-Creation-Date: 2024-08-13 12:20+0200\n"
+"PO-Revision-Date: 2024-08-13 12:20+0200\n"
 "Last-Translator: \n"
 "Language-Team: Stadtkreation\n"
 "Language: de\n"
@@ -101,7 +101,7 @@ msgstr "Pflichtfeld"
 msgid "(requires all checkboxes to be checked)"
 msgstr "(alle Checkboxen müssen ausgewählt werden)"
 
-#: blocks/mymovi-form-input/src/edit.js:238 mymovi.php:363 mymovi.php:507
+#: blocks/mymovi-form-input/src/edit.js:238 mymovi.php:367 mymovi.php:511
 msgid "Please select"
 msgstr "Bitte auswählen"
 
@@ -163,99 +163,99 @@ msgstr "Keine %s gefunden."
 msgid "No %s found in Trash."
 msgstr "Keine %s im Papierkorb gefunden."
 
-#: mymovi.php:110
+#: mymovi.php:114
 msgid "Next pages not yet activated"
 msgstr "Die nächsten Seiten wurde noch nicht aktiviert"
 
-#: mymovi.php:140
+#: mymovi.php:144
 msgid "You have successfully submitted your data."
 msgstr "Sie haben Ihre Daten erfolgreich übermittelt."
 
-#: mymovi.php:145
+#: mymovi.php:149
 msgid "Entry"
 msgstr "Eintrag"
 
-#: mymovi.php:186
+#: mymovi.php:190
 msgid "Submit data"
 msgstr "Daten absenden"
 
-#: mymovi.php:197
+#: mymovi.php:201
 msgid "Prev"
 msgstr "Vorherige"
 
-#: mymovi.php:208
+#: mymovi.php:212
 msgid "Next"
 msgstr "Nächste"
 
-#: mymovi.php:223
+#: mymovi.php:227
 #, php-format
 msgid "Page %1$s of %2$s"
 msgstr "Seite %1$s von %2$s"
 
-#: mymovi.php:263 mymovi.php:576
+#: mymovi.php:267 mymovi.php:580
 msgid "Description"
 msgstr "Beschreibung"
 
-#: mymovi.php:276
+#: mymovi.php:280
 msgid "Map input"
 msgstr "Karteneintrag"
 
-#: mymovi.php:293
+#: mymovi.php:297
 msgid "Location"
 msgstr "Ort"
 
-#: mymovi.php:293
+#: mymovi.php:297
 msgid "Locations"
 msgstr "Orte"
 
-#: mymovi.php:294
+#: mymovi.php:298
 msgid "Route"
 msgstr "Route"
 
-#: mymovi.php:294
+#: mymovi.php:298
 msgid "Routes"
 msgstr "Routen"
 
-#: mymovi.php:295
+#: mymovi.php:299
 msgid "Radius"
 msgstr "Radius"
 
-#: mymovi.php:295
+#: mymovi.php:299
 msgid "Radii"
 msgstr "Radien"
 
-#: mymovi.php:296
+#: mymovi.php:300
 msgid "Area"
 msgstr "Fläche"
 
-#: mymovi.php:296
+#: mymovi.php:300
 msgid "Areas"
 msgstr "Flächen"
 
-#: mymovi.php:297
+#: mymovi.php:301
 msgid "None"
 msgstr "Keiner"
 
-#: mymovi.php:443
+#: mymovi.php:447
 msgid "Please select the desired map entry type"
 msgstr "Bitte wählen Sie den gewünschten Karteneintragstypen"
 
-#: mymovi.php:616
+#: mymovi.php:620
 msgid "Edit text or delete"
 msgstr "Text bearbeiten oder löschen"
 
-#: mymovi.php:617
+#: mymovi.php:621
 msgid "Modify features"
 msgstr "Features bearbeiten"
 
-#: mymovi.php:618
+#: mymovi.php:622
 msgid "Remove last point"
 msgstr "Letzten Punkt entfernen"
 
-#: mymovi.php:625
+#: mymovi.php:629
 msgid "Save and close"
 msgstr "Speichern und schließen"
 
-#: mymovi.php:626
+#: mymovi.php:630
 msgid "Delete feature"
 msgstr "Feature löschen"
