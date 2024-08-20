@@ -1,27 +1,45 @@
-import { useBlockProps } from '@wordpress/block-editor';
+import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
 
 import { outputForAttributes } from './edit'
 
 export default function save({ attributes }) {
-	const { type, name, label, options, option_texts, minlength, maxlength, min, max, step, required } = {
-		type: "",
-		name: "",
-		label: "",
-		options: [], option_texts: [],
-		minlength: 0, maxlength: 0,
-		min: 0, max: 0, step: 0,
-		required: false,
+	const { show_on } = {
+		show_on: "",
 		...attributes // Override previous defaults if contained in the given attributes
 	};
 
 	return (
 		<div {...useBlockProps.save()}>
-			<div className={"mymovi-form-field input-field type-"+type.key}>
+			{show_on == "" ? outputWithSubfields(attributes) : (
+				<div data-mymovi-show-on={show_on} style={{ display: 'none' }}>
+					{outputWithSubfields(attributes)}
+				</div>
+			)}
+		</div>
+	);
+}
+
+function outputWithSubfields(attributes) {
+	const { type, name, label } = {
+		type: {
+			key: "text",
+		},
+		name: "",
+		label: "",
+		...attributes // Override previous defaults if contained in the given attributes
+	};
+
+	return (
+		<>
+			<div className={"mymovi-form-field input-field type-" + type.key}>
 				<label>
 					{label} <br />
 					{outputForAttributes(attributes)}
 				</label>
 			</div>
-		</div>
+			<div id={'mymovi-' + name + '-subfields'}>
+				<InnerBlocks.Content />
+			</div>
+		</>
 	);
 }

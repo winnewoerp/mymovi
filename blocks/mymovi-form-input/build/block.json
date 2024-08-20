@@ -40,6 +40,9 @@
     },
     "required": {
       "type": "boolean"
+    },
+    "show_on": {
+      "type": "string"
     }
   },
   "supports": {
@@ -53,5 +56,6 @@
   },
   "textdomain": "mymovi",
   "editorScript": "file:./index.js",
+  "script": "file:./view.js",
   "style": "file:./style-index.css"
 }

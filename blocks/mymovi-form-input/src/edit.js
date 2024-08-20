@@ -11,9 +11,11 @@ import { __ } from '@wordpress/i18n';
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
-import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
+import { InspectorControls, useBlockProps, InnerBlocks } from '@wordpress/block-editor';
 
 import { PanelBody, TextControl, ToggleControl, CustomSelectControl } from '@wordpress/components';
+
+import { showSubfields } from './view.js';
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -24,7 +26,7 @@ import { PanelBody, TextControl, ToggleControl, CustomSelectControl } from '@wor
  * @return {Element} Element to render.
  */
 export default function Edit({ attributes, setAttributes }) {
-	const { type, name, label, options, option_texts, minlength, maxlength, min, max, step, required } = {
+	const { type, name, label, options, option_texts, minlength, maxlength, min, max, step, required, show_on } = {
 		type: {
 			key: "text",
 			name: __("Text", 'mymovi'),
@@ -35,6 +37,7 @@ export default function Edit({ attributes, setAttributes }) {
 		minlength: 0, maxlength: 0,
 		min: 0, max: 0, step: 0,
 		required: false,
+		show_on: "",
 		...attributes // Override previous defaults if contained in the given attributes
 	};
 
@@ -167,16 +170,50 @@ export default function Edit({ attributes, setAttributes }) {
 							/>
 						</>
 					)}
+					<TextControl
+						label={__('Show on parent\'s value', 'mymovi')}
+						value={show_on}
+						onChange={(value) =>
+							setAttributes({ show_on: value })
+						}
+					/>
 				</PanelBody>
 			</InspectorControls>
 
 			<div {...useBlockProps()}>
-				<div className={"mymovi-form-field input-field type-" + type.key}>
-					<label>
-						{label} <br />
-						{outputForAttributes(attributes)}
-					</label>
-				</div>
+				{show_on == "" ? outputWithSubfields(attributes) : (
+					<details data-mymovi-show-on={show_on}>
+						<summary>
+							{__('Only shown on: ', 'mymovi') + show_on}
+						</summary>
+						{outputWithSubfields(attributes)}
+					</details>
+				)}
+			</div>
+		</>
+	);
+}
+
+function outputWithSubfields(attributes) {
+	const { type, name, label } = {
+		type: {
+			key: "text",
+		},
+		name: "",
+		label: "",
+		...attributes // Override previous defaults if contained in the given attributes
+	};
+
+	return (
+		<>
+			<div className={"mymovi-form-field input-field type-" + type.key}>
+				<label>
+					{label} <br />
+					{outputForAttributes(attributes)}
+				</label>
+			</div>
+			<div id={'mymovi-' + name + '-subfields'}>
+				<InnerBlocks />
 			</div>
 		</>
 	);
@@ -184,7 +221,10 @@ export default function Edit({ attributes, setAttributes }) {
 
 export function outputForAttributes(attributes) {
 	const { type, name, options, option_texts, minlength, maxlength, min, max, step, required } = {
-		type: "",
+		type: {
+			key: "text",
+			name: __("Text", 'mymovi'),
+		},
 		name: "",
 		options: [], option_texts: [],
 		minlength: 0, maxlength: 0,
@@ -193,22 +233,40 @@ export function outputForAttributes(attributes) {
 		...attributes // Override any defaults if contained in the given attributes
 	};
 
+	const nameAttribute = "mymovi-field-" + name;
+
 	switch (type.key) {
 		case "text":
 			return <input
 				type="text"
-				name={"mymovi-field-" + name}
+				name={nameAttribute}
 				minLength={minlength} maxLength={maxlength}
 				required={required}
+				data-mymovi-show-subfields
+				onInput={(e) => {
+					showSubfields(name, e.target);
+				}}
 			/>;
 		case "textarea":
 			return <textarea
-				name={"mymovi-field-" + name}
+				name={nameAttribute}
 				minLength={minlength} maxLength={maxlength}
 				required={required}
+				data-mymovi-show-subfields
+				onInput={(e) => {
+					showSubfields(name, e.target);
+				}}
 			/>;
 		case "number":
-			return <input type="number" name={"mymovi-field-" + name} min={min} max={max} required={required} />;
+			return <input
+				type="number"
+				name={nameAttribute}
+				min={min} max={max}
+				required={required}
+				data-mymovi-show-subfields
+				onInput={(e) => {
+					showSubfields(name, e.target);
+				}} />;
 		case "range":
 			const datalistOptions = [];
 			for (let i = 0; i < options.length; i++) {
@@ -219,9 +277,13 @@ export function outputForAttributes(attributes) {
 				<input
 					type="range"
 					id={"range-" + name}
-					name={"range-" + name}
+					name={nameAttribute}
 					min={min} max={max} step={step}
 					list={"datalist-" + name}
+					data-mymovi-show-subfields
+					onInput={(e) => {
+						showSubfields(name, e.target);
+					}}
 				/>
 				<datalist id={"datalist-" + name}>
 					{datalistOptions}
@@ -234,7 +296,14 @@ export function outputForAttributes(attributes) {
 			}
 
 			return (
-				<select name={"mymovi-field-" + name} required={required}>
+				<select
+					name={nameAttribute}
+					required={required}
+					data-mymovi-show-subfields
+					onInput={(e) => {
+						showSubfields(name, e.target);
+					}}
+				>
 					<option value="">{__('Please select', 'mymovi')}</option>
 					{optionTags}
 				</select>
@@ -245,7 +314,15 @@ export function outputForAttributes(attributes) {
 			for (let i = 0; i < options.length; i++) {
 				checkboxOptions.push((
 					<label key={i}>
-						<input type="checkbox" name={"mymovi-field-" + name} value={options[i]} required={required} />
+						<input
+							type="checkbox"
+							name={nameAttribute}
+							value={options[i]}
+							required={required}
+							data-mymovi-show-subfields
+							onInput={(e) => {
+								showSubfields(name, e.target);
+							}} />
 						{i < option_texts.length ? option_texts[i] : options[i]} <br />
 					</label>
 				));
@@ -258,7 +335,15 @@ export function outputForAttributes(attributes) {
 			for (let i = 0; i < options.length; i++) {
 				radioOptions.push((
 					<label key={i}>
-						<input type="radio" name={"mymovi-field-" + name} value={options[i]} required={required} />
+						<input
+							type="radio"
+							name={nameAttribute}
+							value={options[i]}
+							required={required}
+							data-mymovi-show-subfields
+							onInput={(e) => {
+								showSubfields(name, e.target);
+							}} />
 						{i < option_texts.length ? option_texts[i] : options[i]} <br />
 					</label>
 				));
