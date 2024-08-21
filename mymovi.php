@@ -110,7 +110,7 @@ function mymovi_form_shortcode($atts, $content) {
 	// extract shortcode attributes
 	$a = shortcode_atts( 
 		array(
-			'stop-at-page' => 9999,
+			'stop-at-page' => PHP_INT_MAX,
 			'stop-at-page-text' => esc_html__('Next pages not yet activated','mymovi'),
 			'fgcolor' => null,
 			'bgcolor' => null,
