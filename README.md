@@ -36,6 +36,22 @@ The supported attributes are:
 - **fgcolor**: *(CSS color)* The foreground color of the map.
 - **bgcolor**: *(CSS color)* The background color of the map.
 
+#### Map with fixed position
+
+To have a fixed map layout with scrollable text section, e.g. with the map on the left hand side and the text on the right hand side, create a two-column section with 50%/50% column widths. Put the **[mymovi-the-map]** shortcode in the left column and the scrollable questionnaire into the right column (using **[mymovi-form]** shortcode, see above) and **"Mymovi Form Input"** Gutenberg blocks or **[mymovi-form-field]** shortcodes (see below). You will then have to add some lines of CSS (not part of the plugin so far), in order to achieve the desired behavior.
+
+In our example usecase, we used the following CSS (with **the-map** automatically set as ID for the map element by the plugin): 
+
+```
+.wp-block-columns #the-map {
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: calc(100vh - 80px);
+	position: absolute;
+}
+```
+
 ### Input fields
 
 To add form inputs, there are two options present: the more modern Gutenberg-Blocks (that show you how the form will look in the editor) and the older shortcodes. The "map" input is only supported once per page and as a shortcode, for everything else it is recommended to use the Gutenberg-Blocks.
