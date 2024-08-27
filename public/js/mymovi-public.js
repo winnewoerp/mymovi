@@ -373,6 +373,27 @@ window.addEventListener("load", () => {
 		showPage();
 	}
 	
+	const columns = document.querySelector('.wp-block-columns.map-survey');
+	if(map && columns && columns.scrollHeight > columns.clientHeight) {
+		const scrollButton = document.createElement('button');
+		scrollButton.addEventListener('click', (e) => {
+			e.preventDefault();
+
+			const surveyColumn = document.querySelector('.wp-block-columns.map-survey .wp-block-column.survey');
+			if (surveyColumn) surveyColumn.scrollIntoView();
+		});
+		scrollButton.innerText = "^";
+
+		const div = document.createElement('div');
+		div.classList.add('ol-control');
+		div.appendChild(scrollButton);
+		div.style.margin = "10px";
+		div.style.marginLeft = "50px";
+		div.style.marginTop = "0px";
+
+		map.addControl(new ol.control.Control({element: div}));
+	}
+
 	/*let countPages = 1;
 	document.querySelectorAll('.mymovi-form-page').forEach((item) => {
 		item.setAttribute('id','page' + countPages);
