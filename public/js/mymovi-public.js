@@ -351,32 +351,35 @@ function selectStyle() {
 	return styles;
 }
 
-let hasScrollButton = false;
+let hasScrollButtons = false;
 /**
  * Adds a scroll button to the map if none exists yet
  */
-function addScrollButton() {
-	if (hasScrollButton)
+function showScrollButtons() {
+	if (hasScrollButtons)
 		return;
 
-	const scrollButton = document.createElement('button');
-	scrollButton.addEventListener('click', (e) => {
+	const scrollToSurveyButton = document.querySelector('.scroll-to-survey');
+	scrollToSurveyButton.querySelector('button').addEventListener('click', (e) => {
 		e.preventDefault();
 
 		scrollToSurvey();
 	});
-	scrollButton.innerText = "^";
+	scrollToSurveyButton.style.display = 'inherit';
+	map.addControl(new ol.control.Control({element: scrollToSurveyButton}));
 
-	const div = document.createElement('div');
-	div.classList.add('ol-control');
-	div.appendChild(scrollButton);
-	div.style.margin = "10px";
-	div.style.marginLeft = "50px";
-	div.style.marginTop = "0px";
+	const scrollToMapButton = document.querySelectorAll('.scroll-to-map');
+	scrollToMapButton.forEach(e => {
+		e.querySelector('button').addEventListener('click', event => {
+			event.preventDefault();
 
-	map.addControl(new ol.control.Control({element: div}));
+			scrollToMap();
+		});
 
-	hasScrollButton = true;
+		e.style.display = 'inherit';
+	});
+
+	hasScrollButtons = true;
 }
 
 /**
@@ -385,6 +388,14 @@ function addScrollButton() {
 function scrollToSurvey() {
 	const surveyColumn = document.querySelector('.wp-block-columns.map-survey .wp-block-column.survey');
 	if (surveyColumn) surveyColumn.scrollIntoView();
+}
+
+/**
+ * Scrolls to show the map column, if it exists
+ */
+function scrollToMap() {
+	const mapColumn = document.querySelector('.wp-block-columns.map-survey .wp-block-column.map');
+	if (mapColumn) mapColumn.scrollIntoView();
 }
 
 window.addEventListener("load", () => {
@@ -411,7 +422,7 @@ window.addEventListener("load", () => {
 	
 	const columns = document.querySelector('.wp-block-columns.map-survey');
 	if(map && columns && columns.scrollHeight > columns.clientHeight) {
-		addScrollButton();
+		showScrollButtons();
 		scrollToSurvey();
 	}
 
@@ -433,7 +444,7 @@ window.addEventListener("load", () => {
 window.addEventListener('resize', () => {
 	const columns = document.querySelector('.wp-block-columns.map-survey');
 	if(map && columns && columns.scrollHeight > columns.clientHeight) {
-		addScrollButton();
+		showScrollButtons();
 	}
 });
 

@@ -438,6 +438,9 @@ function mymovi_form_field_shortcode($atts, $content, $tag) {
 							<img src="' . $a['icon'] . '" alt="map icon ' . $a['name'] . '">
 						</div>
 					</div>
+					<div class="scroll-to-map">
+						<button>'.esc_html__('Scroll to map', 'mymovi').'</button>
+					</div>
 					' . $a['icon-text'] . ' (' . $icon_types_text . ')
 				</div>';
 			}
@@ -616,6 +619,9 @@ function mymovi_the_map_shortcode($atts, $content) {
 			</div>";
 
 	$output .= '
+			<div class="ol-control scroll-to-survey">
+				<button>'.esc_html__('Scroll to survey', 'mymovi').'</button>
+			</div>
 			<div class="map-control-buttons" id="mymovi-' . $name . '-control-buttons">
 				<input class="form-control edit-button" type="button" value="✐ ' . esc_html__('Edit text or delete', 'mymovi') . '" id="mymovi-button-select-' . $name .'">
 				<input class="form-control modify-button" type="button" value="✐ ' . esc_html__('Modify features', 'mymovi') . '" id="mymovi-button-modify-'. $name .'" autocomplete="off">

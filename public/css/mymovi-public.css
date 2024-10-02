@@ -180,6 +180,27 @@ body {
 	width: auto;
 }
 
+.scroll-to-survey {
+	display: none;
+
+	margin: 0px 10px 10px 50px;
+}
+
+.scroll-to-survey > button {
+	width: fit-content;
+	padding: 5px;
+}
+
+.scroll-to-map {
+	display: none;
+	
+	margin: 5px;
+}
+
+.scroll-to-map > button {
+	padding: 5px;
+}
+
 /* MyMoVi style for original ol controls */
 
 .ol-control button {
