@@ -351,6 +351,42 @@ function selectStyle() {
 	return styles;
 }
 
+let hasScrollButton = false;
+/**
+ * Adds a scroll button to the map if none exists yet
+ */
+function addScrollButton() {
+	if (hasScrollButton)
+		return;
+
+	const scrollButton = document.createElement('button');
+	scrollButton.addEventListener('click', (e) => {
+		e.preventDefault();
+
+		scrollToSurvey();
+	});
+	scrollButton.innerText = "^";
+
+	const div = document.createElement('div');
+	div.classList.add('ol-control');
+	div.appendChild(scrollButton);
+	div.style.margin = "10px";
+	div.style.marginLeft = "50px";
+	div.style.marginTop = "0px";
+
+	map.addControl(new ol.control.Control({element: div}));
+
+	hasScrollButton = true;
+}
+
+/**
+ * Scrolls to show the survey column, if it exists
+ */
+function scrollToSurvey() {
+	const surveyColumn = document.querySelector('.wp-block-columns.map-survey .wp-block-column.survey');
+	if (surveyColumn) surveyColumn.scrollIntoView();
+}
+
 window.addEventListener("load", () => {
 	/**
 	 * MyMoVi form
@@ -375,23 +411,8 @@ window.addEventListener("load", () => {
 	
 	const columns = document.querySelector('.wp-block-columns.map-survey');
 	if(map && columns && columns.scrollHeight > columns.clientHeight) {
-		const scrollButton = document.createElement('button');
-		scrollButton.addEventListener('click', (e) => {
-			e.preventDefault();
-
-			const surveyColumn = document.querySelector('.wp-block-columns.map-survey .wp-block-column.survey');
-			if (surveyColumn) surveyColumn.scrollIntoView();
-		});
-		scrollButton.innerText = "^";
-
-		const div = document.createElement('div');
-		div.classList.add('ol-control');
-		div.appendChild(scrollButton);
-		div.style.margin = "10px";
-		div.style.marginLeft = "50px";
-		div.style.marginTop = "0px";
-
-		map.addControl(new ol.control.Control({element: div}));
+		addScrollButton();
+		scrollToSurvey();
 	}
 
 	/*let countPages = 1;
@@ -406,6 +427,13 @@ window.addEventListener("load", () => {
 		e = e || event;
 		var txtArea = /textarea/i.test((e.target || e.srcElement).tagName);
 		return txtArea || (e.keyCode || e.which || e.charCode || 0) !== 13;
+	}
+});
+
+window.addEventListener('resize', () => {
+	const columns = document.querySelector('.wp-block-columns.map-survey');
+	if(map && columns && columns.scrollHeight > columns.clientHeight) {
+		addScrollButton();
 	}
 });
 
