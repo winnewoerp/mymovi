@@ -52,6 +52,35 @@ In our example usecase, we used the following CSS (with **the-map** automaticall
 }
 ```
 
+#### Map with floating questions
+
+To have the questions shown inside of the map, put the **[mymovi-form]** shortcode and all **"Mymovi Form Input"** Gutenberg blocks or **[mymovi-form-field]** shortcodes between opening and closing tag of the **[mymovi-the-map]** shortcode. You can optionally control the map's size and position with custom CSS of your needs.
+
+As an example, you might use the following to stretch the map to nearly full-width:
+
+```
+.entry-content>.mymovi-form-the-map>#the-map {
+	position: relative;
+	right:calc((100vw - 100%)/2 - 50px);
+	width:calc(100vw - 100px);
+}
+```
+
+To improve the size of the question box on narrow screens, you can add the following:
+
+```
+@media (width < 900px) {
+	.mymovi-contents-wrapper.opened {
+		max-height: calc(100% - 2em);
+		height: calc(50% - 1em + (900px - 100vw));
+	}
+}
+```
+
+#### Other layouts
+
+You can also try other layouts. If you only need the map in one of your questions, you can include it only on that page of the form, by putting it between the relevant **[mymovi-form-pagebreak]** shortcodes. You can also wrap the map inside an HTML `<details>` element to let the user control when it's shown. There are many options!
+
 ### Input fields
 
 To add form inputs, there are two options present: the more modern Gutenberg-Blocks (that show you how the form will look in the editor) and the older shortcodes. The "map" input is only supported once per page and as a shortcode, for everything else it is recommended to use the Gutenberg-Blocks.

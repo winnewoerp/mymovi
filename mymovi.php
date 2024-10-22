@@ -3,7 +3,7 @@
 Plugin Name: MyMoVi - My Mobility Vision
 Plugin URI: https://perimobil.linieplus.de
 Description: A tool for participatory mobility vision creation.
-Version: 1.0
+Version: 1.0.1
 Requires at least: 6.1.1
 Requires PHP: 8.0
 Author: Linie Plus, Stadtkreation, and Perimobil project team
